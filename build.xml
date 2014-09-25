@@ -1,0 +1,19 @@
+<project name="JamaMQ" basedir=".">
+    <description>
+        JamaMQ build file
+    </description>
+
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="bin" location="bin"/>
+
+    <target name="compile" description="compile the source" >
+        <!-- Compile the java code from ${src} into ${bin} -->
+        <javac srcdir="${src}" destdir="${bin}"/>
+    </target>
+
+    <target name="jar" depends="compile" description="generate jar file" >
+        <!-- Put everything in ${bin} into the JamaMQ.jar file -->
+        <jar jarfile="./${ant.project.name}.jar" basedir="${bin}"/>
+    </target>
+</project>
