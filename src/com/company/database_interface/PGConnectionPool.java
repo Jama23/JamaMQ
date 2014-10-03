@@ -1,4 +1,4 @@
-package com.company.database;
+package com.company.database_interface;
 
 import org.postgresql.ds.PGPoolingDataSource;
 

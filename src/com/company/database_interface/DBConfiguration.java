@@ -1,4 +1,4 @@
-package com.company.database;
+package com.company.database_interface;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
