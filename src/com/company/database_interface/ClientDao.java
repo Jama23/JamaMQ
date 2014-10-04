@@ -15,15 +15,15 @@ import java.sql.SQLException;
  */
 public class ClientDao {
 
-    private Connection _connecton = null;
+    private Connection _connection = null;
 
     public ClientDao(Connection connection) {
-        _connecton = connection;
+        _connection = connection;
     }
 
     public void createClient(Client client) throws ClientCreateException, ClientAlreadyExistsException {
         try {
-            CallableStatement callStat = _connecton.prepareCall("{ call createClient(?,?) }");
+            CallableStatement callStat = _connection.prepareCall("{ call createClient(?,?) }");
             callStat.setInt(1, client.getId());
             callStat.setTimestamp(2, client.getCreationTime());
             callStat.execute();
@@ -38,7 +38,7 @@ public class ClientDao {
 
     public void deleteClient(int id) throws ClientDeleteException, ClientDoesNotExistException {
         try {
-            CallableStatement callStat = _connecton.prepareCall("{ call deleteClient(?) }");
+            CallableStatement callStat = _connection.prepareCall("{ call deleteClient(?) }");
             callStat.setInt(1, id);
             callStat.execute();
             callStat.close();

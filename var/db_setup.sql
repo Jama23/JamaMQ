@@ -1,7 +1,16 @@
 ---------------------------------------------------------------------------------------
+-- Postgresql Database Setup -- JamaMQ -- October 2014 _-------------------------------
+---------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
+
+
+
+---------------------------------------------------------------------------------------
 -- Clean Database
 ---------------------------------------------------------------------------------------
 DROP DATABASE jamamq;
+
+
 
 ---------------------------------------------------------------------------------------
 -- Initialize Database
@@ -36,11 +45,40 @@ CREATE TABLE Client
     creationTime timestamp
 );
 
+
+
 ---------------------------------------------------------------------------------------
 -- Stored Procedures
 ---------------------------------------------------------------------------------------
 
 -- Message Table ----------------------------------------------------------------------
+
+-- Enqueue Message
+CREATE OR REPLACE FUNCTION enqueueMessage(sender_ integer, receiver_ integer, queue_ integer, arrivaltime_ timestamp, message_ varchar)
+	RETURNS integer AS
+$BODY$
+declare
+     identifier integer;
+begin
+    IF EXISTS(SELECT id FROM queue WHERE Id = $3) THEN
+        IF EXISTS(SELECT id FROM client WHERE Id = $1) THEN
+	        INSERT INTO message("sender", "receiver", "queue", "arrivaltime", "message") VALUES($1, $2, $3, $4, $5) RETURNING id into identifier;
+            return identifier;
+        ELSE
+            RAISE 'No client with id % found.', $1 USING ERRCODE = 'V2006';
+        END IF;
+	ELSE
+	    RAISE 'No queue with id % found.', $1 USING ERRCODE = 'V2005';
+	END IF;
+end
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
+
+-- Dequeue Message
+
+
+-- Peek Message
 
 
 -- Queue Table ------------------------------------------------------------------------
