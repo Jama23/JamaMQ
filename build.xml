@@ -1,19 +1,61 @@
-<project name="JamaMQ" basedir=".">
+<project name="JamaMQ" default="compile" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="src.dir"    location="src"/>
+  <property name="build.dir"  location="bin"/>
+  <property name="lib.dir"    location="lib"/>
+  <property name="main-class" value="com.company.Main"/>
+  <path id="classpath">
+    <fileset dir="${lib.dir}" includes="postgresql-9.3-1102.jdbc41.jar"/>
+  </path>
+
+  <target name="compile" description="compiles the source">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeantruntime="false" />
+  </target>
+
+  <target name="jar" depends="compile" description="generate a jar executable" >
+    <!-- Put everything in into a executable jar file -->
+    <jar jarfile="${ant.project.name}.jar" basedir="${build.dir}" />
+  </target>
+
+  <!--<target name="run" depends="jar" description="execute the jar file" >
+    <java classname="${main-class}" fork="true">
+      <classpath>
+        <path refid="classpath"/>
+        <path location="${ant.project.name}.jar"/>
+      </classpath>
+      <arg value="${user}"/>
+      <arg value="${password}"/>
+    </java>
+  </target>-->
+
+  <target name="clean" description="clean up" >
+    <!-- Delete the ${build} directory and the jar file -->
+    <delete dir="${build.dir}"/>
+    <delete file="${ant.project.name}.jar"/>
+  </target>
+
+</project>
+
+
+
+
+
+<!--<project name="JamaMQ" basedir=".">
     <description>
         JamaMQ build file
     </description>
 
-    <!-- set global properties for this build -->
     <property name="src" location="src"/>
     <property name="bin" location="bin"/>
 
     <target name="compile" description="compile the source" >
-        <!-- Compile the java code from ${src} into ${bin} -->
         <javac srcdir="${src}" destdir="${bin}"/>
     </target>
 
     <target name="jar" depends="compile" description="generate jar file" >
-        <!-- Put everything in ${bin} into the JamaMQ.jar file -->
         <jar jarfile="./${ant.project.name}.jar" basedir="${bin}"/>
     </target>
-</project>
+</project>-->
