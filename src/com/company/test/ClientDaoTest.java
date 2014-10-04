@@ -16,13 +16,6 @@ import java.sql.*;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created with IntelliJ IDEA.
- * User: nano
- * Date: 07/11/13
- * Time: 23:10
- * To change this template use File | Settings | File Templates.
- */
 public class ClientDaoTest {
     Connection connection_;
     ClientDao dao_;
@@ -38,15 +31,17 @@ public class ClientDaoTest {
 
     @After
     public void tearDown() throws Exception {
+        PreparedStatement ps = connection_.prepareStatement("TRUNCATE TABLE client");
+        ps.execute();
         connection_.close();
     }
 
     @Test
     public void testCreateClient() throws Exception {
-        Client c = ModelFactory.createClient(10);
+        Client c = ModelFactory.createClient(11);
         dao_.createClient(c);
         PreparedStatement ps = connection_.prepareStatement("SELECT * FROM client WHERE id = ?");
-        ps.setInt(1, 10);
+        ps.setInt(1, 11);
         ResultSet rs = ps.executeQuery();
         if(rs.next()) {
             Timestamp ts = rs.getTimestamp(2);
@@ -57,7 +52,7 @@ public class ClientDaoTest {
     }
 
     @Test(expected=ClientAlreadyExistsException.class)
-    public void testCreateClient_ClientExistsException() throws Exception {
+    public void testCreateClient_ClientAlreadyExistsException() throws Exception {
         Client c1 = ModelFactory.createClient(20);
         Client c2 = ModelFactory.createClient(20);
         dao_.createClient(c1);

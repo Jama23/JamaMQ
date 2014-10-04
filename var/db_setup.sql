@@ -45,11 +45,73 @@ CREATE TABLE Client
 
 -- Queue Table ------------------------------------------------------------------------
 
+-- Create Queue
+CREATE OR REPLACE FUNCTION createQueue(id_ integer, creationtime_ timestamp)
+	RETURNS void AS
+$BODY$
+declare
+begin
+	IF NOT EXISTS(SELECT id FROM queue WHERE id = $1) THEN
+		INSERT INTO queue("id", "creationtime") VALUES($1, $2);
+	ELSE
+		RAISE 'Queue with id % already exists.', $1 USING ERRCODE = 'V2003';
+	END IF;
+end
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
+
+-- Delete Queue
+CREATE OR REPLACE FUNCTION deleteQueue(id_ integer)
+	RETURNS void AS
+$BODY$
+declare
+begin
+    IF EXISTS(SELECT id FROM queue WHERE id = $1) THEN
+	    DELETE FROM queue WHERE Id = $1;
+	ELSE
+	    RAISE 'Queue with id % does not exist.', $1 USING ERRCODE = 'V2004';
+	END IF;
+end
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
+
+-- Get Queue
+CREATE OR REPLACE FUNCTION getQueue(id_ integer)
+	RETURNS queue AS
+$BODY$
+declare
+    result_record queue;
+begin
+    IF EXISTS(SELECT * FROM queue WHERE id = $1) THEN
+	    SELECT * FROM queue INTO result_record WHERE id = $1;
+	    return result_record;
+	ELSE
+	    RAISE 'Queue with id % does not exist.', $1 USING ERRCODE = 'V2004';
+	END IF;
+end
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
+
+-- Get Waiting Queues
+CREATE OR REPLACE FUNCTION getWaitingQueues(recid_ integer)
+	RETURNS TABLE(queueid integer) AS
+$BODY$
+declare
+begin
+    Return QUERY
+	SELECT DISTINCT queue FROM message WHERE receiver = $1;
+end
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
 
 -- Client Table -----------------------------------------------------------------------
 
 -- Create Client
-CREATE OR REPLACE FUNCTION createClient(id integer, creationtime timestamp)
+CREATE OR REPLACE FUNCTION createClient(id_ integer, creationtime_ timestamp)
 	RETURNS void AS
 $BODY$
 declare
@@ -57,7 +119,7 @@ begin
 	IF NOT EXISTS(SELECT id FROM client WHERE id = $1) THEN
 		INSERT INTO client("id", "creationtime") VALUES($1, $2);
 	ELSE
-		RAISE 'Client with id % already exists.', $1 USING ERRCODE = 'V2001'
+		RAISE 'Client with id % already exists.', $1 USING ERRCODE = 'V2001';
 	END IF;
 end
 $BODY$
@@ -65,11 +127,10 @@ LANGUAGE plpgsql VOLATILE
 COST 100;
 
 -- Delete Client
-CREATE OR REPLACE FUNCTION deleteClient(identifier integer)
+CREATE OR REPLACE FUNCTION deleteClient(id_ integer)
 	RETURNS void AS
 $BODY$
 declare
---    ident integer;
 begin
     IF EXISTS(SELECT id FROM client WHERE id = $1) THEN
 	    DELETE FROM client WHERE id = $1;

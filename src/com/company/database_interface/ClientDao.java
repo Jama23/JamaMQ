@@ -43,7 +43,7 @@ public class ClientDao {
             callStat.execute();
             callStat.close();
         } catch (SQLException e) {
-            if (e.getSQLState().equals("V2002")) { // Custom: Client does not exists
+            if (e.getSQLState().equals("V2002")) { // Custom: Client does not exist
                 throw new ClientDoesNotExistException(e);
             }
             throw new ClientDeleteException(e);
