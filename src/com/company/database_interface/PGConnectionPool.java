@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 public class PGConnectionPool {
 
     private static Logger LOGGER_ = Logger.getLogger(PGConnectionPool.class.getCanonicalName());
-    private static PGConnectionPool INSTANCE_ = null;
 
+    private static PGConnectionPool INSTANCE_ = null;
     private PGPoolingDataSource source_;
 
     public static PGConnectionPool getInstance() {
