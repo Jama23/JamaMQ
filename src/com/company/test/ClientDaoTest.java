@@ -17,30 +17,30 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ClientDaoTest {
-    Connection connection_;
-    ClientDao dao_;
+    Connection _connection;
+    ClientDao _dao;
 
     @Before
     public void setUp() throws Exception {
         DBConfiguration.initDBConfig("var/config.prop");
-        connection_ = PGConnectionPool.getInstance().getConnection();
-        dao_ = new ClientDao(connection_);
-        PreparedStatement ps = connection_.prepareStatement("TRUNCATE TABLE client");
+        _connection = PGConnectionPool.getInstance().getConnection();
+        _dao = new ClientDao(_connection);
+        PreparedStatement ps = _connection.prepareStatement("TRUNCATE TABLE client");
         ps.execute();
     }
 
     @After
     public void tearDown() throws Exception {
-        PreparedStatement ps = connection_.prepareStatement("TRUNCATE TABLE client");
+        PreparedStatement ps = _connection.prepareStatement("TRUNCATE TABLE client");
         ps.execute();
-        connection_.close();
+        _connection.close();
     }
 
     @Test
     public void testCreateClient() throws Exception {
         Client c = ModelFactory.createClient(11);
-        dao_.createClient(c);
-        PreparedStatement ps = connection_.prepareStatement("SELECT * FROM client WHERE id = ?");
+        _dao.createClient(c);
+        PreparedStatement ps = _connection.prepareStatement("SELECT * FROM client WHERE id = ?");
         ps.setInt(1, 11);
         ResultSet rs = ps.executeQuery();
         if(rs.next()) {
@@ -55,16 +55,16 @@ public class ClientDaoTest {
     public void testCreateClient_ClientAlreadyExistsException() throws Exception {
         Client c1 = ModelFactory.createClient(20);
         Client c2 = ModelFactory.createClient(20);
-        dao_.createClient(c1);
-        dao_.createClient(c2);
+        _dao.createClient(c1);
+        _dao.createClient(c2);
     }
 
     @Test
     public void testDeleteClient() throws Exception {
         Client c = ModelFactory.createClient(30);
-        dao_.createClient(c);
-        dao_.deleteClient(30);
-        PreparedStatement ps = connection_.prepareStatement("SELECT * FROM client WHERE Id = ?");
+        _dao.createClient(c);
+        _dao.deleteClient(30);
+        PreparedStatement ps = _connection.prepareStatement("SELECT * FROM client WHERE Id = ?");
         ps.setInt(1, 30);
         ResultSet rs = ps.executeQuery();
         assertTrue("Client could not be deleted.", !rs.next());
@@ -73,8 +73,8 @@ public class ClientDaoTest {
     @Test(expected=ClientDoesNotExistException.class)
     public void testDeleteClient_ClientDoesNotExistException() throws Exception {
         Client c = ModelFactory.createClient(40);
-        dao_.createClient(c);
-        dao_.deleteClient(40);
-        dao_.deleteClient(40);
+        _dao.createClient(c);
+        _dao.deleteClient(40);
+        _dao.deleteClient(40);
     }
 }

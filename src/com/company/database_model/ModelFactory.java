@@ -19,7 +19,7 @@ public class ModelFactory {
     }
 
     public static Message createMessage(int sender, int receiver, int queue, Timestamp arrivalTime, String message) {
-        return createMessage(sender, receiver, queue, new Timestamp(System.currentTimeMillis()), message);
+        return new Message(sender, receiver, queue, arrivalTime, message);
     }
 
     public static Queue createQueue(int id) {

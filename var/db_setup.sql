@@ -68,18 +68,69 @@ begin
             RAISE 'No client with id % found.', $1 USING ERRCODE = 'V2006';
         END IF;
 	ELSE
-	    RAISE 'No queue with id % found.', $1 USING ERRCODE = 'V2005';
+	    RAISE 'No queue with id % found.', $3 USING ERRCODE = 'V2005';
 	END IF;
 end
 $BODY$
 LANGUAGE plpgsql VOLATILE
 COST 100;
 
--- Dequeue Message
-
-
--- Peek Message
-
+-- Dequeue / Peek Message
+CREATE OR REPLACE FUNCTION dequeueMessage(reqclient_ integer, partsender_ integer, queue_ integer, peek boolean)
+    RETURNS message AS
+$BODY$
+declare
+     result_record message;
+begin
+	IF ($3 != 0) THEN
+		-- Dequeue message from a particular queue
+		IF EXISTS(SELECT id FROM queue WHERE Id = $3) THEN
+			IF ($2 != 0) THEN
+				-- Dequeue message from queue with id 'queue_' with sender id set to 'partsender_'
+				IF EXISTS(SELECT id FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1) AND queue = $3) THEN
+					SELECT * INTO result_record FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1) AND queue = $3 ORDER BY arrivaltime ASC LIMIT 1;
+					IF (!peek) THEN
+						DELETE FROM message WHERE id = result_record.id;
+					END IF;
+					return result_record;
+				ELSE
+					RAISE 'No message in queue with id % and sender with id % for client with id % found.', $3, $2, $1 USING ERRCODE = 'V2008';
+				END IF;
+			ELSE
+				-- Dequeue oldest (topmost) message from queue with id 'queue_'
+				IF EXISTS(SELECT id FROM message WHERE queue = $3) THEN
+					SELECT * INTO result_record FROM message WHERE queue = $3 ORDER BY arrivaltime ASC LIMIT 1;
+					IF (result_record.receiver = 0 OR result_record.receiver = $1) THEN
+						IF (!peek) THEN
+							DELETE FROM message WHERE id = result_record.id;
+						END IF;
+						return result_record;
+					ELSE
+						RAISE 'Topmost message of queue with id % is not intended for client with id %.', $3, $1 USING ERRCODE = 'V2010';
+					END IF;
+				ELSE
+					RAISE 'No message in queue with id %.', $3 USING ERRCODE = 'V2009';
+				END IF;
+			END IF;
+		ELSE
+            RAISE 'No queue with id % found.', $3 USING ERRCODE = 'V2007';
+        END IF;
+	ELSE
+		-- Dequeue message from any queue with sender id set to 'partsender_'
+		IF EXISTS(SELECT id FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1)) THEN
+			SELECT * INTO result_record FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1) ORDER BY arrivaltime ASC LIMIT 1;
+			IF (!peek) THEN
+				DELETE FROM message WHERE id = result_record.id;
+			END IF;
+			return result_record;
+		ELSE
+			RAISE 'No message with sender id % for client with id % found.', $2, $1 USING ERRCODE = 'V2011';
+		END IF;
+	END IF;
+end
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
 
 -- Queue Table ------------------------------------------------------------------------
 
