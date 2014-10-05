@@ -2,10 +2,7 @@ package com.company.database_interface;
 
 import com.company.database_model.Message;
 import com.company.database_model.ModelFactory;
-import com.company.exception.MessageDequeueException;
-import com.company.exception.MessageEnqueueException;
-import com.company.exception.MessageQueueDoesNotExistException;
-import com.company.exception.MessageSenderDoesNotExistException;
+import com.company.exception.*;
 
 import java.sql.*;
 
@@ -20,7 +17,7 @@ public class MessageDao {
         _connection = connection;
     }
 
-    public void enqueueMessage(Message message) throws MessageEnqueueException, MessageSenderDoesNotExistException, MessageQueueDoesNotExistException {
+    public void enqueueMessage(Message message) throws MessageEnqueueException, MessageEnqueueSenderDoesNotExistException, MessageEnqueueQueueDoesNotExistException {
         try {
             CallableStatement callStat = _connection.prepareCall("{ call enqueueMessage(?,?,?,?,?) }");
             callStat.setInt(1, message.getSender());
@@ -32,9 +29,9 @@ public class MessageDao {
             callStat.close();
         } catch (SQLException e) {
             if (e.getSQLState().equals("V2005")) {
-                throw new MessageQueueDoesNotExistException(e);
+                throw new MessageEnqueueQueueDoesNotExistException(e);
             } else if (e.getSQLState().equals("V2006")) {
-                throw  new MessageSenderDoesNotExistException(e);
+                throw  new MessageEnqueueSenderDoesNotExistException(e);
             }
             throw new MessageEnqueueException(e);
         }
@@ -53,7 +50,7 @@ public class MessageDao {
      * @param peek:         If peek is set to true, message that is returned from database will not be deleted.
      * @return
      */
-    public Message dequeueMessage(int reqClientId, int partSenderId, int queueId, boolean peek) throws MessageDequeueException {
+    public Message dequeueMessage(int reqClientId, int partSenderId, int queueId, boolean peek) throws MessageDequeueException, MessageDequeueQueueDoesNotExistException, MessageDequeueEmptyQueueException, MessageDequeueNotIntendedReceiverException {
         if (!(queueId == 0 && partSenderId == 0)) {
             try {
                 CallableStatement callStat = _connection.prepareCall("{ call dequeueMessage(?,?,?,?) }");
@@ -69,6 +66,13 @@ public class MessageDao {
                 callStat.close();
                 return message;
             } catch (SQLException e) {
+                if (e.getSQLState().equals("V2007")) {
+                    throw new MessageDequeueQueueDoesNotExistException(e);
+                } else if (e.getSQLState().equals("V2008")) {
+                    throw new MessageDequeueEmptyQueueException(e);
+                } else if (e.getSQLState().equals("V2009") || e.getSQLState().equals("V2010")) {
+                    throw new MessageDequeueNotIntendedReceiverException(e);
+                }
                 throw new MessageDequeueException();
             }
         } else {
