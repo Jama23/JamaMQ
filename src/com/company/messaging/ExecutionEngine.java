@@ -165,7 +165,7 @@ public class ExecutionEngine {
         buffer.get(message);
         Message m = DBModelFactory.createMessage(senderId, receiverId, queueId, new String(message));
         _manager.startDBConnection();
-        _manager.abortDBTransaction();
+        _manager.startDBTransaction();
         try {
             _manager.getMessageDao().enqueueMessage(m);
         } catch (MessageEnqueueException e) {
@@ -177,6 +177,9 @@ public class ExecutionEngine {
         } catch (MessageEnqueueQueueDoesNotExistException e) {
             _manager.abortDBTransaction();
             return err(ERR_QUEUE_DOES_NOT_EXIST_EXCEPTION);
+        } finally {
+        _manager.endDBTransaction();
+        _manager.endDBConnection();
         }
         return ok();
     }

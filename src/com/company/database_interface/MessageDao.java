@@ -57,7 +57,11 @@ public class MessageDao {
                 callStat.setInt(1, reqClientId);
                 callStat.setInt(2, partSenderId);
                 callStat.setInt(3, queueId);
-                callStat.setBoolean(4, peek);
+                if (peek) {
+                    callStat.setInt(4, 1);
+                }
+                callStat.setInt(4, 0);
+
                 ResultSet resSet = callStat.executeQuery();
                 resSet.next(); // if result set is empty we get an exception
                 Message message = DBModelFactory.createMessage(resSet.getInt(1), resSet.getInt(2), resSet.getInt(3),

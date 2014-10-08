@@ -103,7 +103,6 @@ public class QueueDaoTest {
         for (int i = 0; i < 4; i++) { ps.execute(); }
 
         List<Integer> res = _dao.getWaitingQueues(2);
-        assertTrue("Retrieved queue not waiting.", res.get(0) == 3);
-        assertTrue("Retrieved queue not waiting.", res.get(1) == 4);
+        assertTrue("Retrieved queues not waiting.", (res.get(0) == 3 && res.get(1) == 4) || (res.get(0) == 4 && res.get(1) == 3));
     }
 }

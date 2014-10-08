@@ -102,6 +102,7 @@ public class MessageDaoTest {
         Message m1 = DBModelFactory.createMessage(1, 0, 1, "Hello1");
         Message m2 = DBModelFactory.createMessage(2, 0, 1, "Hello2");
         _mdao.enqueueMessage(m1);
+        Thread.sleep(2000);
         _mdao.enqueueMessage(m2);
         Message m = _mdao.dequeueMessage(3, 0, 1, false);
         assertEquals("Dequeue topmost message does not work. Sender not correct.", m1.getSender(), m.getSender());
