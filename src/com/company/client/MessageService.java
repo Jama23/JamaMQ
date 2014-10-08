@@ -2,6 +2,9 @@ package com.company.client;
 
 import com.company.exception.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Jan Marti on 08.10.2014.
  */
@@ -31,8 +34,12 @@ public class MessageService {
         _backend.deleteQueue(queueId);
     }
 
+    public List<Integer> getWaitingQueueIds() {
+        return new ArrayList<Integer>(1);
+    }
 
-
-
+    public Message getMessageFromSender(String sender) {
+        return new Message(0,0,"0");
+    }
 
 }
