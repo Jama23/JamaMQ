@@ -40,7 +40,7 @@ public class MessageDao {
     /**
      *
      * @param reqClientId:  ID of the requesting client. If receiver ID of message is not equal to 0 (particular
-     *                      receiver specified), only requesting client with that id can de-queue message.
+     *                      receiver specified), only requesting client with that id can dequeue message.
      * @param partSenderId: If partSenderId is not equal to 0, the requesting client queries for messages from a
      *                      particular sender.
      * @param queueId:      If queueId is not equal to 0, the requesting client queries a specific queue, otherwise the
@@ -73,10 +73,10 @@ public class MessageDao {
                 } else if (e.getSQLState().equals("V2009") || e.getSQLState().equals("V2010")) {
                     throw new MessageDequeueNotIntendedReceiverException(e);
                 }
-                throw new MessageDequeueException();
+                throw new MessageDequeueException(new Exception());
             }
         } else {
-            throw new MessageDequeueException();
+            throw new MessageDequeueException(new Exception());
         }
     }
 }

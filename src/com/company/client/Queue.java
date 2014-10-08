@@ -16,32 +16,40 @@ public class Queue {
         _id = id;
     }
 
-    public int getId() {
+    /*public int getId() {
         return _id;
-    }
+    }*/
 
     public void enqueueMessage(Message message) throws MessageEnqueueException, MessageEnqueueSenderDoesNotExistException, MessageEnqueueQueueDoesNotExistException {
         _clientBackend.enqueueMessage(_id, message);
     }
 
-    /* Dequeues topmost message from queue */
-    public Message dequeueMessage() {
-        return _clientBackend.getMessage(0, false);
+    /**
+     * Dequeues topmost message from queue
+     */
+    public Message dequeueMessage() throws MessageDequeueQueueDoesNotExistException, MessageDequeueException, MessageDequeueNotIntendedReceiverException, MessageDequeueEmptyQueueException {
+        return _clientBackend.getMessage(_id, 0, false);
     }
 
-    /* Dequeues message from specific sender from queue */
-    public Message dequeueMessageFromSender(int sender) {
-        return _clientBackend.getMessage(sender, false);
+    /**
+     * Dequeues message from specific sender from queue
+     */
+    public Message dequeueMessageFromSender(String sender) throws MessageDequeueQueueDoesNotExistException, MessageDequeueException, MessageDequeueNotIntendedReceiverException, MessageDequeueEmptyQueueException {
+        return _clientBackend.getMessage(_id, sender.hashCode(), false);
     }
 
-    /* Dequeues topmost message from queue */
-    public Message peekMessage() {
-        return _clientBackend.getMessage(0, true);
+    /**
+     * Peeks topmost message from queue, i.e returns message but leaves it in queue
+     */
+    public Message peekMessage() throws MessageDequeueQueueDoesNotExistException, MessageDequeueException, MessageDequeueNotIntendedReceiverException, MessageDequeueEmptyQueueException {
+        return _clientBackend.getMessage(_id, 0, true);
     }
 
-    /* Dequeues message from specific sender from queue */
-    public Message peekMessageFromSender(int sender) {
-        return _clientBackend.getMessage(sender, true);
+    /**
+     * Peeks topmost message from specific sender from queue, i.e returns message but leaves it in queue
+     */
+    public Message peekMessageFromSender(String sender) throws MessageDequeueQueueDoesNotExistException, MessageDequeueException, MessageDequeueNotIntendedReceiverException, MessageDequeueEmptyQueueException {
+        return _clientBackend.getMessage(_id, sender.hashCode(), true);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.client.MessageService;
 import org.postgresql.*;
 /**
  * Created by Jan Marti on 27.09.2014.
@@ -7,6 +8,9 @@ import org.postgresql.*;
 public class Main {
 
     public static void main(String[] args) {
+
+        MessageService ms = new MessageService("", 5555);
+
         System.out.println("Hello World.");
 
         //Simple output

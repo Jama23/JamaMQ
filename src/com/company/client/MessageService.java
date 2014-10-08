@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by Jan Marti on 08.10.2014.
+ * This class represents a message service that a client can use to enqueue (dequeue) messages to (from) the database
  */
 public class MessageService {
 
@@ -22,15 +23,15 @@ public class MessageService {
         _backend.deregister();
     }
 
-    public Queue createQueue(String queueId) {
+    public Queue createQueue(String queueId) throws QueueAlreadyExistsException, QueueCreateException {
         return _backend.createQueue(queueId);
     }
 
-    public Queue getQueue(String queueId) throws QueueDoesNotExistException {
+    public Queue getQueue(String queueId) throws QueueDoesNotExistException, QueueGetException {
         return _backend.getQueue(queueId);
     }
 
-    public void deleteQueue(String queueId) throws QueueDoesNotExistException {
+    public void deleteQueue(String queueId) throws QueueDoesNotExistException, QueueDeleteException {
         _backend.deleteQueue(queueId);
     }
 

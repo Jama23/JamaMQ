@@ -14,34 +14,33 @@ public class Response {
     public static final int STATUS_OK = 1;
     public static final int STATUS_ERROR = 2;
 
-    public static final int MSG_REGISTER_CLIENT = 1;
-    public static final int MSG_DEREGISTER_CLIENT = 2;
-    /*public static final int MSG_CREATE_QUEUE = 3;
-    public static final int MSG_GET_QUEUE = 4;
-    public static final int MSG_DELETE_QUEUE = 5;
-    public static final int MSG_PUT_INTO_QUEUE = 6;
-    public static final int MSG_GET = 7;
-    public static final int MSG_PEEK = 8;*/
+    public static final int MSG_CLIENT_REGISTER = 1;
+    public static final int MSG_CLIENT_DEREGISTER = 2;
+    public static final int MSG_QUEUE_CREATE = 3;
+    public static final int MSG_QUEUE_GET = 4;
+    public static final int MSG_QUEUE_DELETE = 5;
+    public static final int MSG_QUEUE_ENQUEUE = 6;
+    public static final int MSG_QUEUE_DEQUEUE= 7;
 
 
 
-    public static final int ERR_CLIENT_CREATION_EXCEPTION = 1;
-    public static final int ERR_CLIENT_ALREADY_EXISTS_EXCEPTION = 2;
-    public static final int ERR_CLIENT_DELETION_EXCEPTION = 3;
-    public static final int ERR_CLIENT_DOES_NOT_EXIST_EXCEPTION = 4;
+    public static final int ERR_CLIENT_CREATE_EXCEPTION = 11;
+    public static final int ERR_CLIENT_ALREADY_EXISTS_EXCEPTION = 12;
+    public static final int ERR_CLIENT_DELETE_EXCEPTION = 13;
+    public static final int ERR_CLIENT_DOES_NOT_EXIST_EXCEPTION = 14;
 
-    public static final int ERR_QUEUE_CREATION_EXCEPTION = 41;
-    public static final int ERR_QUEUE_EXISTS_EXCEPTION = 42;
-    public static final int ERR_QUEUE_READ_EXCEPTION = 43;
-    public static final int ERR_QUEUE_DOES_NOT_EXIST_EXCEPTION = 44;
-    public static final int ERR_QUEUE_DELETION_EXCEPTION = 45;
+    public static final int ERR_QUEUE_CREATE_EXCEPTION = 21;
+    public static final int ERR_QUEUE_ALREADY_EXISTS_EXCEPTION = 22;
+    public static final int ERR_QUEUE_GET_EXCEPTION = 23;
+    public static final int ERR_QUEUE_DOES_NOT_EXIST_EXCEPTION = 24;
+    public static final int ERR_QUEUE_DELETE_EXCEPTION = 25;
 
-    public static final int ERR_MESSAGE_ENQUEUEING_EXCEPTION = 81;
+    public static final int ERR_MESSAGE_ENQUEUE_EXCEPTION = 81;
     public static final int ERR_SENDER_DOES_NOT_EXIST_EXCEPTION = 82;
-    public static final int ERR_MESSAGE_DEQUEUEING_EXCEPTION = 83;
-    public static final int ERR_NO_MESSAGE_IN_QUEUE_EXCEPTION = 84;
-    public static final int ERR_NO_MESSAGE_FROM_SENDER_EXCEPTION = 85;
-    public static final int ERR_MESSAGE_PEEKING_EXCEPTION = 86;
+    public static final int ERR_MESSAGE_DEQUEUE_EXCEPTION = 83;
+    public static final int ERR_EMPTY_QUEUE_EXCEPTION = 84;
+    public static final int ERR_NO_MESSAGE_EXCEPTION = 85;
+
 
     /*private final int status_;
     private final int errorCode_;
