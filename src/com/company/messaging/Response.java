@@ -11,20 +11,22 @@ import java.util.logging.Logger;
  */
 public class Response {
 
-    public static final int MSG_REGISTER = 1;
-    public static final int MSG_DEREGISTER = 2;
-    public static final int MSG_CREATE_QUEUE = 3;
+    public static final int STATUS_OK = 1;
+    public static final int STATUS_ERROR = 2;
+
+    public static final int MSG_REGISTER_CLIENT = 1;
+    public static final int MSG_DEREGISTER_CLIENT = 2;
+    /*public static final int MSG_CREATE_QUEUE = 3;
     public static final int MSG_GET_QUEUE = 4;
     public static final int MSG_DELETE_QUEUE = 5;
     public static final int MSG_PUT_INTO_QUEUE = 6;
     public static final int MSG_GET = 7;
-    public static final int MSG_PEEK = 8;
+    public static final int MSG_PEEK = 8;*/
 
-    public static final int STATUS_OK = 1;
-    public static final int STATUS_ERROR = 2;
+
 
     public static final int ERR_CLIENT_CREATION_EXCEPTION = 1;
-    public static final int ERR_CLIENT_EXISTS_EXCEPTION = 2;
+    public static final int ERR_CLIENT_ALREADY_EXISTS_EXCEPTION = 2;
     public static final int ERR_CLIENT_DELETION_EXCEPTION = 3;
     public static final int ERR_CLIENT_DOES_NOT_EXIST_EXCEPTION = 4;
 
@@ -41,7 +43,7 @@ public class Response {
     public static final int ERR_NO_MESSAGE_FROM_SENDER_EXCEPTION = 85;
     public static final int ERR_MESSAGE_PEEKING_EXCEPTION = 86;
 
-    private final int status_;
+    /*private final int status_;
     private final int errorCode_;
     private final Message m_;
 
@@ -90,5 +92,5 @@ public class Response {
             buffer.putInt(m_.getMessage().getBytes().length);
             buffer.put(m_.getMessage().getBytes());
         }
-    }
+    }*/
 }
