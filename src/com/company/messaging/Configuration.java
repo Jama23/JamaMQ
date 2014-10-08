@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class Configuration {
 
-    private static Logger LOGGER_ = Logger.getLogger(Configuration.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(Configuration.class.getCanonicalName());
     private static Properties PROPS_ = new Properties();
 
     public static void initConfig(String configFile) {
@@ -22,10 +22,10 @@ public class Configuration {
             PROPS_.load(stream);
             stream.close();
         } catch (FileNotFoundException e) {
-            LOGGER_.log(Level.SEVERE, "Could not find the configuration file.");
+            _LOGGER.log(Level.SEVERE, "Could not find the configuration file.");
             throw new RuntimeException(e);
         } catch (IOException e) {
-            LOGGER_.log(Level.SEVERE, "Could not open the configuration file.");
+            _LOGGER.log(Level.SEVERE, "Could not open the configuration file.");
             throw new RuntimeException(e);
         }
     }

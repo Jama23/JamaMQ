@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class Acceptor implements Runnable {
 
-    private static Logger LOGGER_ = Logger.getLogger(Acceptor.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(Acceptor.class.getCanonicalName());
 
     private boolean _isRunning;
 
@@ -33,7 +33,7 @@ public class Acceptor implements Runnable {
 
     private void init(String host, int port) {
         System.out.print("\n");
-        LOGGER_.log(Level.INFO, "Initializing Acceptor on " + host + ":" + port);
+        _LOGGER.log(Level.INFO, "Initializing Acceptor on " + host + ":" + port);
         try {
             _selector = Selector.open();
             _serverSocketChannel = ServerSocketChannel.open();
@@ -44,7 +44,7 @@ public class Acceptor implements Runnable {
             // Attaching the AcceptorHandler to the server channel
             key.attach(new AcceptorHandler(_executor, _selector, _serverSocketChannel));
         } catch (IOException e) {
-            LOGGER_.log(Level.SEVERE, "Could not open the selector or server socket channel");
+            _LOGGER.log(Level.SEVERE, "Could not open the selector or server socket channel");
             throw new RuntimeException(e);
         }
     }
@@ -63,7 +63,7 @@ public class Acceptor implements Runnable {
                     dispatch(key);
                 }
             } catch (IOException e) {
-                LOGGER_.log(Level.SEVERE, "Error while selecting SelectionKey");
+                _LOGGER.log(Level.SEVERE, "Error while selecting SelectionKey");
                 throw new RuntimeException(e);
             }
         }

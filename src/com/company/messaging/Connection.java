@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class Connection implements Runnable {
 
-    private static Logger LOGGER_ = Logger.getLogger(Connection.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(Connection.class.getCanonicalName());
 
     private final ByteBuffer _buffer;
     private final Callback _callback;
@@ -21,7 +21,7 @@ public class Connection implements Runnable {
 
     @Override
     public void run() {
-        LOGGER_.log(Level.FINE, "Running executor: " + Thread.currentThread().getId());
+        _LOGGER.log(Level.FINE, "Running executor: " + Thread.currentThread().getId());
         ExecutionEngine executionEngine = new ExecutionEngine();
         executionEngine.process(_buffer);
 

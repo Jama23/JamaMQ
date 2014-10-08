@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class ClientBackend {
 
-    private static Logger LOGGER_ = Logger.getLogger(ClientBackend.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(ClientBackend.class.getCanonicalName());
 
     private Socket _socket;
     private DataInputStream _in;
@@ -38,7 +38,7 @@ public class ClientBackend {
             _in = new DataInputStream(_socket.getInputStream());
             _out = new DataOutputStream(_socket.getOutputStream());
         } catch (IOException e) {
-            LOGGER_.log(Level.SEVERE, "Could not open socket. Stopping.");
+            _LOGGER.log(Level.SEVERE, "Could not open socket. Stopping.");
             throw new RuntimeException(e);
         }
     }
@@ -220,7 +220,12 @@ public class ClientBackend {
             _out.writeInt(_clientId); //Receiver
             _out.writeInt(senderId); //Particular sender
             _out.writeInt(queueId); //Queue
-            _out.writeBoolean(peek);
+            if (peek) {
+                _out.writeInt(1);
+            }
+            else {
+                _out.writeInt(0);
+            }
             _out.flush();
 
             int messageType = _in.readInt();

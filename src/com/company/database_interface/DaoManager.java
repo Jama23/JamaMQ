@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class DaoManager {
 
-    private static Logger LOGGER_ = Logger.getLogger(DaoManager.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(DaoManager.class.getCanonicalName());
 
     private Connection _connection = null;
     private MessageDao _messageDao = null;
@@ -18,46 +18,46 @@ public class DaoManager {
     private ClientDao _clientDao = null;
 
     public void startDBConnection() {
-        LOGGER_.log(Level.FINE, "Starting database connection.");
+        _LOGGER.log(Level.FINE, "Starting database connection.");
         _connection = PGConnectionPool.getInstance().getConnection();
     }
 
     public void endDBConnection() {
         try {
-            LOGGER_.log(Level.FINE, "Ending database connection.");
+            _LOGGER.log(Level.FINE, "Ending database connection.");
             _connection.close();
         } catch (SQLException e) {
-            LOGGER_.log(Level.SEVERE, "Ending database connection failed.");
+            _LOGGER.log(Level.SEVERE, "Ending database connection failed.");
             throw new RuntimeException(e);
         }
     }
 
     public void startDBTransaction() {
         try {
-            LOGGER_.log(Level.FINE, "Starting database transaction.");
+            _LOGGER.log(Level.FINE, "Starting database transaction.");
             _connection.setAutoCommit(false);
         } catch (SQLException e) {
-            LOGGER_.log(Level.SEVERE, "Starting database transaction failed.");
+            _LOGGER.log(Level.SEVERE, "Starting database transaction failed.");
             throw new RuntimeException(e);
         }
     }
 
     public void endDBTransaction() {
         try {
-            LOGGER_.log(Level.FINE, "Ending database transaction.");
+            _LOGGER.log(Level.FINE, "Ending database transaction.");
             _connection.commit();
         } catch (SQLException e) {
-            LOGGER_.log(Level.SEVERE, "Ending database transaction failed.");
+            _LOGGER.log(Level.SEVERE, "Ending database transaction failed.");
             throw new RuntimeException(e);
         }
     }
 
     public void abortDBTransaction() {
         try {
-            LOGGER_.log(Level.FINE, "Aborting database transaction.");
+            _LOGGER.log(Level.FINE, "Aborting database transaction.");
             _connection.rollback();
         } catch (SQLException e) {
-            LOGGER_.log(Level.SEVERE, "Aborting database transaction failed.");
+            _LOGGER.log(Level.SEVERE, "Aborting database transaction failed.");
             throw new RuntimeException(e);
         }
     }

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class ConnectionHandler implements Runnable {
 
-    private static Logger LOGGER_ = Logger.getLogger(ConnectionHandler.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(ConnectionHandler.class.getCanonicalName());
 
     private final ExecutorService _executor;
     private final Selector _selector;
@@ -35,10 +35,10 @@ public class ConnectionHandler implements Runnable {
     @Override
     public void run() {
         if(_key.isReadable()) {
-            LOGGER_.log(Level.FINE, "reading");
+            _LOGGER.log(Level.FINE, "reading");
             read();
         } else if(_key.isWritable()) {
-            LOGGER_.log(Level.FINE, "writing");
+            _LOGGER.log(Level.FINE, "writing");
             write();
         }
     }
@@ -54,7 +54,7 @@ public class ConnectionHandler implements Runnable {
             // read first message size
             do {
                 if((bytes = _socketChannel.read(_buffer)) < 0) {
-                    LOGGER_.log(Level.FINE, "Message size bytes: " + bytes);
+                    _LOGGER.log(Level.FINE, "Message size bytes: " + bytes);
                     _socketChannel.close();
                     return;
                 }
@@ -76,7 +76,7 @@ public class ConnectionHandler implements Runnable {
             // read more from the network..
             while(bytesRead < size){
                 if((bytes = _socketChannel.read(_buffer)) < 0) {
-                    LOGGER_.log(Level.FINE, "Message rest bytes: " + bytes);
+                    _LOGGER.log(Level.FINE, "Message rest bytes: " + bytes);
                     _socketChannel.close();
                     return;
                 }
@@ -91,14 +91,14 @@ public class ConnectionHandler implements Runnable {
                     new Callback() {
                         @Override
                         public void callback() {
-                            LOGGER_.log(Level.FINE, "Calling callback");
+                            _LOGGER.log(Level.FINE, "Calling callback");
                             _key.interestOps(SelectionKey.OP_WRITE);
                             _selector.wakeup();
-                            LOGGER_.log(Level.FINE, "Interest ops set");
+                            _LOGGER.log(Level.FINE, "Interest ops set");
                         }
                     }));
         } catch (IOException e) {
-            LOGGER_.log(Level.SEVERE, "Could not read from socket channel");
+            _LOGGER.log(Level.SEVERE, "Could not read from socket channel");
             throw new RuntimeException(e);
         }
     }
@@ -109,7 +109,7 @@ public class ConnectionHandler implements Runnable {
             _socketChannel.write(_buffer);
             _key.interestOps(SelectionKey.OP_READ);
         } catch (IOException e) {
-            LOGGER_.log(Level.SEVERE, "Could not write to socket channel");
+            _LOGGER.log(Level.SEVERE, "Could not write to socket channel");
             throw new RuntimeException(e);
         }
     }

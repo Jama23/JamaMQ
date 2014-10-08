@@ -8,5 +8,5 @@ db.pool.initial: 10
 
 # Messaging Service
 ms.pool.max: 10
-net.interface.ip: 0.0.0.0
+net.interface.ip: 127.0.0.1
 net.interface.port: 5555

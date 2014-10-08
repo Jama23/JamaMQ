@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class PGConnectionPool {
 
-    private static Logger LOGGER_ = Logger.getLogger(PGConnectionPool.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(PGConnectionPool.class.getCanonicalName());
 
     private static PGConnectionPool INSTANCE_ = null;
     private PGPoolingDataSource source_;
@@ -40,7 +40,7 @@ public class PGConnectionPool {
         try {
             con = source_.getConnection();
         } catch (SQLException e) {
-            LOGGER_.log(Level.SEVERE, "Could not retrieve connection from the connection pool.");
+            _LOGGER.log(Level.SEVERE, "Could not retrieve connection from the connection pool.");
             throw new RuntimeException(e);
         }
         return con;

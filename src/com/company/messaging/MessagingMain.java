@@ -1,8 +1,6 @@
-package com.company;
+package com.company.messaging;
 
 import com.company.logging.LoggerSingleton;
-import com.company.messaging.Configuration;
-import com.company.messaging.Acceptor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,14 +30,14 @@ public class MessagingMain {
         }
 
         Configuration.initConfig(configFilePath);
-        Configuration.putProperty("log.perf.path", logPath);
+        Configuration.putProperty("log.eval.path", logPath);
 
         MessagingMain mm = new MessagingMain();
         mm.start();
     }
 
     public MessagingMain() {
-        LoggerSingleton.initLogger(Configuration.getProperty("log.perf.path"));
+        LoggerSingleton.initLogger(Configuration.getProperty("log.eval.path"));
         _executor = Executors.newFixedThreadPool(Integer.parseInt(Configuration.getProperty("ms.pool.max")));
         System.out.println("Starting executor threads: ");
         for(int i = 0; i < Integer.parseInt(Configuration.getProperty("ms.pool.max")); i++) {

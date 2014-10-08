@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class AcceptorHandler implements Runnable {
 
-    private static Logger LOGGER_ = Logger.getLogger(AcceptorHandler.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(AcceptorHandler.class.getCanonicalName());
 
     private final ExecutorService _executor;
     private final Selector _selector;
@@ -34,20 +34,20 @@ public class AcceptorHandler implements Runnable {
         try {
             SocketChannel socketChannel = _serverSocketChannel.accept();
             if(socketChannel != null) {
-                LOGGER_.log(Level.INFO, "Accepted new connection from: " + socketChannel.socket().getRemoteSocketAddress());
+                _LOGGER.log(Level.INFO, "Accepted new connection from: " + socketChannel.socket().getRemoteSocketAddress());
                 socketChannel.configureBlocking(false);
 
                 _selector.wakeup();
-                LOGGER_.log(Level.FINE, "Waked up selector");
+                _LOGGER.log(Level.FINE, "Waked up selector");
 
                 SelectionKey key = socketChannel.register(_selector, SelectionKey.OP_READ);
-                LOGGER_.log(Level.FINE, "Registered on selector");
+                _LOGGER.log(Level.FINE, "Registered on selector");
 
                 key.attach(new ConnectionHandler(_executor, _selector, socketChannel, key));
-                LOGGER_.log(Level.FINE, "Attached ConnectionHandler");
+                _LOGGER.log(Level.FINE, "Attached ConnectionHandler");
             }
         } catch (IOException e) {
-            LOGGER_.log(Level.SEVERE, "Could not open client socket channel");
+            _LOGGER.log(Level.SEVERE, "Could not open client socket channel");
             throw new RuntimeException(e);
         }
     }
