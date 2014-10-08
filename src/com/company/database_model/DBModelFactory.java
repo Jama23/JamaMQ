@@ -6,7 +6,7 @@ import java.sql.Timestamp;
  * Created by Jan Marti on 03.10.2014.
  * This class creates message, queue and client objects used by system elements that use the database interface
  */
-public class ModelFactory {
+public class DBModelFactory {
 
     /** Used when instantiating message object received form database */
     public static Message createMessage(int id, int sender, int receiver, int queue, Timestamp arrivalTime, String message) {

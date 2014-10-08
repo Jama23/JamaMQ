@@ -3,10 +3,10 @@ package com.company.test;
 import com.company.database_interface.DBConfiguration;
 import com.company.database_interface.ClientDao;
 import com.company.database_interface.PGConnectionPool;
+import com.company.database_model.DBModelFactory;
 import com.company.exception.ClientDoesNotExistException;
 import com.company.exception.ClientAlreadyExistsException;
 import com.company.database_model.Client;
-import com.company.database_model.ModelFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class ClientDaoTest {
 
     @Test
     public void testCreateClient() throws Exception {
-        Client c = ModelFactory.createClient(11);
+        Client c = DBModelFactory.createClient(11);
         _dao.createClient(c);
         PreparedStatement ps = _connection.prepareStatement("SELECT * FROM client WHERE id = ?");
         ps.setInt(1, 11);
@@ -53,15 +53,15 @@ public class ClientDaoTest {
 
     @Test(expected=ClientAlreadyExistsException.class)
     public void testCreateClient_ClientAlreadyExistsException() throws Exception {
-        Client c1 = ModelFactory.createClient(20);
-        Client c2 = ModelFactory.createClient(20);
+        Client c1 = DBModelFactory.createClient(20);
+        Client c2 = DBModelFactory.createClient(20);
         _dao.createClient(c1);
         _dao.createClient(c2);
     }
 
     @Test
     public void testDeleteClient() throws Exception {
-        Client c = ModelFactory.createClient(30);
+        Client c = DBModelFactory.createClient(30);
         _dao.createClient(c);
         _dao.deleteClient(30);
         PreparedStatement ps = _connection.prepareStatement("SELECT * FROM client WHERE Id = ?");
@@ -72,7 +72,7 @@ public class ClientDaoTest {
 
     @Test(expected=ClientDoesNotExistException.class)
     public void testDeleteClient_ClientDoesNotExistException() throws Exception {
-        Client c = ModelFactory.createClient(40);
+        Client c = DBModelFactory.createClient(40);
         _dao.createClient(c);
         _dao.deleteClient(40);
         _dao.deleteClient(40);

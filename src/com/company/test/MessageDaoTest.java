@@ -5,11 +5,11 @@ import com.company.database_interface.MessageDao;
 import com.company.database_interface.QueueDao;
 import com.company.database_interface.ClientDao;
 import com.company.database_interface.PGConnectionPool;
+import com.company.database_model.DBModelFactory;
 import com.company.exception.*;
 import com.company.database_model. Message;
 import com.company.database_model.Queue;
 import com.company.database_model.Client;
-import com.company.database_model.ModelFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,11 +45,11 @@ public class MessageDaoTest {
 
     @Test
     public void testEnqueueMessage() throws Exception {
-        Client c = ModelFactory.createClient(23);
+        Client c = DBModelFactory.createClient(23);
         _cdao.createClient(c);
-        Queue q = ModelFactory.createQueue(3);
+        Queue q = DBModelFactory.createQueue(3);
         _qdao.createQueue(q);
-        Message m = ModelFactory.createMessage(23,2,3,"Hello Database!");
+        Message m = DBModelFactory.createMessage(23, 2, 3, "Hello Database!");
         _mdao.enqueueMessage(m);
         PreparedStatement ps = _connection.prepareStatement("SELECT * FROM message WHERE sender = ?");
         ps.setInt(1, 23);
@@ -74,17 +74,17 @@ public class MessageDaoTest {
 
     @Test(expected=MessageEnqueueQueueDoesNotExistException.class)
     public void testEnqueueMessage_MessageEnqueueQueueDoesNotExistException() throws Exception {
-        Client c = ModelFactory.createClient(23);
+        Client c = DBModelFactory.createClient(23);
         _cdao.createClient(c);
-        Message m = ModelFactory.createMessage(23,2,3,"Hello Database!");
+        Message m = DBModelFactory.createMessage(23, 2, 3, "Hello Database!");
         _mdao.enqueueMessage(m);
     }
 
     @Test(expected=MessageEnqueueSenderDoesNotExistException.class)
     public void testEnqueueMessage_MessageEnqueueSenderDoesNotExistException() throws Exception {
-        Queue q = ModelFactory.createQueue(3);
+        Queue q = DBModelFactory.createQueue(3);
         _qdao.createQueue(q);
-        Message m = ModelFactory.createMessage(23,2,3,"Hello Database!");
+        Message m = DBModelFactory.createMessage(23, 2, 3, "Hello Database!");
         _mdao.enqueueMessage(m);
     }
 
@@ -96,14 +96,14 @@ public class MessageDaoTest {
         for (int i = 0; i < 4; i++) { ps.execute(); }
         ps = _connection.prepareStatement("INSERT INTO message (sender, receiver, queue) VALUES (1,3,4)");
         for (int i = 0; i < 4; i++) { ps.execute(); }*/
-        Queue q = ModelFactory.createQueue(1);
+        Queue q = DBModelFactory.createQueue(1);
         _qdao.createQueue(q);
-        Client c1 = ModelFactory.createClient(1);
+        Client c1 = DBModelFactory.createClient(1);
         _cdao.createClient(c1);
-        Client c2 = ModelFactory.createClient(2);
+        Client c2 = DBModelFactory.createClient(2);
         _cdao.createClient(c2);
-        Message m1 = ModelFactory.createMessage(1, 0, 1, "Hello1");
-        Message m2 = ModelFactory.createMessage(2, 0, 1, "Hello2");
+        Message m1 = DBModelFactory.createMessage(1, 0, 1, "Hello1");
+        Message m2 = DBModelFactory.createMessage(2, 0, 1, "Hello2");
         _mdao.enqueueMessage(m1);
         _mdao.enqueueMessage(m2);
         Message m = _mdao.dequeueMessage(3, 0, 1, false);

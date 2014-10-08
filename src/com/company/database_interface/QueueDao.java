@@ -1,6 +1,6 @@
 package com.company.database_interface;
 
-import com.company.database_model.ModelFactory;
+import com.company.database_model.DBModelFactory;
 import com.company.database_model.Queue;
 import com.company.exception.*;
 
@@ -57,7 +57,7 @@ public class QueueDao {
             callStat.setInt(1, id);
             ResultSet resSet = callStat.executeQuery();
             resSet.next(); // Existence of record is already checked inside stored procedure on database
-            Queue queue = ModelFactory.createQueue(resSet.getInt(1), resSet.getTimestamp(2));
+            Queue queue = DBModelFactory.createQueue(resSet.getInt(1), resSet.getTimestamp(2));
             resSet.close();
             callStat.close();
             return queue;

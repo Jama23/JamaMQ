@@ -1,7 +1,7 @@
 package com.company.database_interface;
 
+import com.company.database_model.DBModelFactory;
 import com.company.database_model.Message;
-import com.company.database_model.ModelFactory;
 import com.company.exception.*;
 
 import java.sql.*;
@@ -60,7 +60,7 @@ public class MessageDao {
                 callStat.setBoolean(4, peek);
                 ResultSet resSet = callStat.executeQuery();
                 resSet.next(); // if result set is empty we get an exception
-                Message message = ModelFactory.createMessage(resSet.getInt(1), resSet.getInt(2), resSet.getInt(3),
+                Message message = DBModelFactory.createMessage(resSet.getInt(1), resSet.getInt(2), resSet.getInt(3),
                         resSet.getInt(4), resSet.getTimestamp(5), resSet.getString(6));
                 resSet.close();
                 callStat.close();

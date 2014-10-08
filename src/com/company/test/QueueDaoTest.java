@@ -3,10 +3,10 @@ package com.company.test;
 import com.company.database_interface.DBConfiguration;
 import com.company.database_interface.QueueDao;
 import com.company.database_interface.PGConnectionPool;
+import com.company.database_model.DBModelFactory;
 import com.company.exception.QueueDoesNotExistException;
 import com.company.exception.QueueAlreadyExistsException;
 import com.company.database_model.Queue;
-import com.company.database_model.ModelFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class QueueDaoTest {
 
     @Test
     public void testCreateQueue() throws Exception {
-        Queue q = ModelFactory.createQueue(11);
+        Queue q = DBModelFactory.createQueue(11);
         _dao.createQueue(q);
         PreparedStatement ps = _connection.prepareStatement("SELECT * FROM queue WHERE id = ?");
         ps.setInt(1, 11);
@@ -54,15 +54,15 @@ public class QueueDaoTest {
 
     @Test(expected=QueueAlreadyExistsException.class)
     public void testCreateQueue_QueueAlreadyExistsException() throws Exception {
-        Queue q1 = ModelFactory.createQueue(20);
-        Queue q2 = ModelFactory.createQueue(20);
+        Queue q1 = DBModelFactory.createQueue(20);
+        Queue q2 = DBModelFactory.createQueue(20);
         _dao.createQueue(q1);
         _dao.createQueue(q2);
     }
 
     @Test
     public void testDeleteQueue() throws Exception {
-        Queue c = ModelFactory.createQueue(30);
+        Queue c = DBModelFactory.createQueue(30);
         _dao.createQueue(c);
         _dao.deleteQueue(30);
         PreparedStatement ps = _connection.prepareStatement("SELECT * FROM client WHERE Id = ?");
@@ -73,7 +73,7 @@ public class QueueDaoTest {
 
     @Test(expected=QueueDoesNotExistException.class)
     public void testDeleteQueue_QueueDoesNotExistException() throws Exception {
-        Queue c = ModelFactory.createQueue(40);
+        Queue c = DBModelFactory.createQueue(40);
         _dao.createQueue(c);
         _dao.deleteQueue(40);
         _dao.deleteQueue(40);
@@ -81,7 +81,7 @@ public class QueueDaoTest {
 
     @Test
     public void testGetQueue() throws Exception {
-        Queue q_in = ModelFactory.createQueue(23);
+        Queue q_in = DBModelFactory.createQueue(23);
         _dao.createQueue(q_in);
         Queue q_out = _dao.getQueue(23);
         assertTrue("Retrieved queues id not equal.", q_in.getId() == q_out.getId());
