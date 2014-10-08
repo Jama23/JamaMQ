@@ -6,6 +6,7 @@ db.password: jamamqpw
 db.pool.max: 10
 db.pool.initial: 10
 
-mw.pool.max: 10
-net.iface.ip: 0.0.0.0
-net.iface.port: 5555
+# Messaging Service
+ms.pool.max: 10
+net.interface.ip: 0.0.0.0
+net.interface.port: 5555

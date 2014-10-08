@@ -1,5 +1,6 @@
 package com.company.database_interface;
 
+import com.company.messaging.Configuration;
 import org.postgresql.ds.PGPoolingDataSource;
 
 import java.sql.Connection;
@@ -26,12 +27,12 @@ public class PGConnectionPool {
 
     private PGConnectionPool() {
         source_ = new PGPoolingDataSource();
-        source_.setServerName(DBConfiguration.getProperty("db.server.name"));
-        source_.setDatabaseName(DBConfiguration.getProperty("db.database.name"));
-        source_.setUser(DBConfiguration.getProperty("db.user"));
-        source_.setPassword(DBConfiguration.getProperty("db.password"));
-        source_.setMaxConnections(Integer.parseInt(DBConfiguration.getProperty("db.pool.max")));
-        source_.setInitialConnections(Integer.parseInt(DBConfiguration.getProperty("db.pool.initial")));
+        source_.setServerName(Configuration.getProperty("db.server.name"));
+        source_.setDatabaseName(Configuration.getProperty("db.database.name"));
+        source_.setUser(Configuration.getProperty("db.user"));
+        source_.setPassword(Configuration.getProperty("db.password"));
+        source_.setMaxConnections(Integer.parseInt(Configuration.getProperty("db.pool.max")));
+        source_.setInitialConnections(Integer.parseInt(Configuration.getProperty("db.pool.initial")));
     }
 
     public synchronized Connection getConnection() {

@@ -1,6 +1,6 @@
 package com.company.test;
 
-import com.company.database_interface.DBConfiguration;
+import com.company.messaging.Configuration;
 import com.company.database_interface.QueueDao;
 import com.company.database_interface.PGConnectionPool;
 import com.company.database_model.DBModelFactory;
@@ -23,7 +23,7 @@ public class QueueDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        DBConfiguration.initDBConfig("var/config.prop");
+        Configuration.initConfig("var/config.prop");
         _connection = PGConnectionPool.getInstance().getConnection();
         _dao = new QueueDao(_connection);
         PreparedStatement ps = _connection.prepareStatement("TRUNCATE TABLE message, queue");

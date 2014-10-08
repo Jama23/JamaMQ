@@ -1,10 +1,7 @@
 package com.company.test;
 
-import com.company.database_interface.DBConfiguration;
-import com.company.database_interface.MessageDao;
-import com.company.database_interface.QueueDao;
-import com.company.database_interface.ClientDao;
-import com.company.database_interface.PGConnectionPool;
+import com.company.database_interface.*;
+import com.company.messaging.Configuration;
 import com.company.database_model.DBModelFactory;
 import com.company.exception.*;
 import com.company.database_model. Message;
@@ -27,7 +24,7 @@ public class MessageDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        DBConfiguration.initDBConfig("var/config.prop");
+        Configuration.initConfig("var/config.prop");
         _connection = PGConnectionPool.getInstance().getConnection();
         _mdao = new MessageDao(_connection);
         _qdao = new QueueDao(_connection);
