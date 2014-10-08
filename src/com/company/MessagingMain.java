@@ -19,7 +19,9 @@ public class MessagingMain {
 
     public static void main(String[] args) {
 
-        System.out.print("*********** JamaMQ * 2014 ***********");
+        System.out.print(   "*************************************\n" +
+                            "*********** JamaMQ * 2014 ***********\n" +
+                            "*************************************\n" );
 
         String date = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date(System.currentTimeMillis()));
         String configFilePath = "var/config.prop";
@@ -48,7 +50,7 @@ public class MessagingMain {
                 }
             });
         }
-        System.out.print("\n");
+
         _acceptor = new Acceptor(Configuration.getProperty("net.interface.ip"), Integer.parseInt(Configuration.getProperty("net.interface.port")), _executor);
     }
 

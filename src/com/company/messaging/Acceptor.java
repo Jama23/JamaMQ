@@ -32,6 +32,7 @@ public class Acceptor implements Runnable {
     }
 
     private void init(String host, int port) {
+        System.out.print("\n");
         LOGGER_.log(Level.INFO, "Initializing Acceptor on " + host + ":" + port);
         try {
             _selector = Selector.open();

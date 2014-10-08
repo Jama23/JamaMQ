@@ -22,8 +22,8 @@ public class Connection implements Runnable {
     @Override
     public void run() {
         LOGGER_.log(Level.FINE, "Running executor: " + Thread.currentThread().getId());
-        ExecutionService executionService = new ExecutionService();
-        executionService.process(_buffer);
+        ExecutionEngine executionEngine = new ExecutionEngine();
+        executionEngine.process(_buffer);
 
         // calling the callback to register a write interest on the selector.
         _callback.callback();
