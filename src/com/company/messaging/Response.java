@@ -36,11 +36,11 @@ public class Response {
     public static final int ERR_QUEUE_DOES_NOT_EXIST_EXCEPTION = 24;
     public static final int ERR_QUEUE_DELETE_EXCEPTION = 25;
 
-    public static final int ERR_MESSAGE_ENQUEUE_EXCEPTION = 81;
-    public static final int ERR_SENDER_DOES_NOT_EXIST_EXCEPTION = 82;
-    public static final int ERR_MESSAGE_DEQUEUE_EXCEPTION = 83;
-    public static final int ERR_EMPTY_QUEUE_EXCEPTION = 84;
-    public static final int ERR_NO_MESSAGE_EXCEPTION = 85;
+    public static final int ERR_MESSAGE_ENQUEUE_EXCEPTION = 31;
+    public static final int ERR_SENDER_DOES_NOT_EXIST_EXCEPTION = 32;
+    public static final int ERR_MESSAGE_DEQUEUE_EXCEPTION = 33;
+    public static final int ERR_EMPTY_QUEUE_EXCEPTION = 34;
+    public static final int ERR_NO_MESSAGE_EXCEPTION = 35;
 
 
     private final int _status;
