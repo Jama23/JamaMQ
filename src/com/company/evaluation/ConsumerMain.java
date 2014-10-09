@@ -16,6 +16,7 @@ public class ConsumerMain {
             Queue q = messageService.getQueue("Queue1");
             Message m = q.dequeueMessage();
             System.out.println(m.getMessage());
+            messageService.deregister();
         } catch (ClientAlreadyExistsException e) {
             e.printStackTrace();
         } catch (ClientRegisterFailureException e) {
@@ -31,6 +32,10 @@ public class ConsumerMain {
         } catch (MessageDequeueQueueDoesNotExistException e) {
             e.printStackTrace();
         } catch (MessageDequeueEmptyQueueException e) {
+            e.printStackTrace();
+        } catch (ClientDoesNotExistException e) {
+            e.printStackTrace();
+        } catch (ClientDeregisterFailureException e) {
             e.printStackTrace();
         }
     }

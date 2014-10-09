@@ -90,7 +90,7 @@ begin
 					-- Dequeue message from queue with id 'queue_' with sender id set to 'partsender_'
 					IF EXISTS(SELECT id FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1) AND queue = $3) THEN
 						SELECT * INTO result_record FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1) AND queue = $3 ORDER BY arrivaltime ASC LIMIT 1;
-						IF ($4 = 1) THEN
+						IF ($4 = 0) THEN
 							DELETE FROM message WHERE id = result_record.id;
 						END IF;
 						return result_record;
@@ -101,7 +101,7 @@ begin
 					-- Dequeue oldest (topmost) message from queue with id 'queue_'
 					SELECT * INTO result_record FROM message WHERE queue = $3 ORDER BY arrivaltime ASC LIMIT 1;
 					IF (result_record.receiver = 0 OR result_record.receiver = $1) THEN
-						IF ($4 = 1) THEN
+						IF ($4 = 0) THEN
 							DELETE FROM message WHERE id = result_record.id;
 						END IF;
 						return result_record;
@@ -119,7 +119,7 @@ begin
 		-- Dequeue message from any queue with sender id set to 'partsender_'
 		IF EXISTS(SELECT id FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1)) THEN
 			SELECT * INTO result_record FROM message WHERE sender = $2 AND (receiver = 0 OR receiver = $1) ORDER BY arrivaltime ASC LIMIT 1;
-			IF ($4 = 1) THEN
+			IF ($4 = 0) THEN
 				DELETE FROM message WHERE id = result_record.id;
 			END IF;
 			return result_record;

@@ -30,10 +30,6 @@
                 <path refid="classpath"/>
                 <path location="${ant.project.name}.jar"/>
             </classpath>
-            <!--<arg value="${user}"/>-->
-            <!--<arg value="${password}"/>-->
-            <!--<arg value="Jama"/>-->
-            <!--<arg value="23"/>-->
         </java>
     </target>
 
@@ -77,24 +73,3 @@
     </target>
 
 </project>
-
-
-
-
-
-<!--<project name="JamaMQ" basedir=".">
-    <description>
-        JamaMQ build file
-    </description>
-
-    <property name="src" location="src"/>
-    <property name="bin" location="bin"/>
-
-    <target name="compile" description="compile the source" >
-        <javac srcdir="${src}" destdir="${bin}"/>
-    </target>
-
-    <target name="jar" depends="compile" description="generate jar file" >
-        <jar jarfile="./${ant.project.name}.jar" basedir="${bin}"/>
-    </target>
-</project>-->
