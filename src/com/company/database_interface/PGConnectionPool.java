@@ -3,6 +3,7 @@ package com.company.database_interface;
 import com.company.messaging.Configuration;
 import org.postgresql.ds.PGPoolingDataSource;
 
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -15,30 +16,31 @@ public class PGConnectionPool {
 
     private static Logger _LOGGER = Logger.getLogger(PGConnectionPool.class.getCanonicalName());
 
-    private static PGConnectionPool INSTANCE_ = null;
-    private PGPoolingDataSource source_;
+    private static PGConnectionPool _INSTANCE = null;
+    private PGPoolingDataSource _source;
 
     public static PGConnectionPool getInstance() {
-        if(INSTANCE_ == null) {
-            INSTANCE_ = new PGConnectionPool();
+        if(_INSTANCE == null) {
+            _INSTANCE = new PGConnectionPool();
         }
-        return INSTANCE_;
+        return _INSTANCE;
     }
 
     private PGConnectionPool() {
-        source_ = new PGPoolingDataSource();
-        source_.setServerName(Configuration.getProperty("db.server.name"));
-        source_.setDatabaseName(Configuration.getProperty("db.database.name"));
-        source_.setUser(Configuration.getProperty("db.user"));
-        source_.setPassword(Configuration.getProperty("db.password"));
-        source_.setMaxConnections(Integer.parseInt(Configuration.getProperty("db.pool.max")));
-        source_.setInitialConnections(Integer.parseInt(Configuration.getProperty("db.pool.initial")));
+        _source = new PGPoolingDataSource();
+        _source.setServerName(Configuration.getProperty("db.server.name"));
+        _source.setPortNumber(Integer.parseInt(Configuration.getProperty("db.server.port")));
+        _source.setDatabaseName(Configuration.getProperty("db.database.name"));
+        _source.setUser(Configuration.getProperty("db.user"));
+        _source.setPassword(Configuration.getProperty("db.password"));
+        _source.setMaxConnections(Integer.parseInt(Configuration.getProperty("db.pool.max")));
+        _source.setInitialConnections(Integer.parseInt(Configuration.getProperty("db.pool.initial")));
     }
 
     public synchronized Connection getConnection() {
         Connection con = null;
         try {
-            con = source_.getConnection();
+            con = _source.getConnection();
         } catch (SQLException e) {
             _LOGGER.log(Level.SEVERE, "Could not retrieve connection from the connection pool.");
             throw new RuntimeException(e);

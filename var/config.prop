@@ -1,5 +1,6 @@
 # Database
 db.server.name: localhost
+db.server.port: 2323
 db.database.name: jamamq
 db.user: jamamquser
 db.password: jamamqpw

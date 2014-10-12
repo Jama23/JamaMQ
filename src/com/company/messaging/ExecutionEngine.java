@@ -25,7 +25,6 @@ public class ExecutionEngine {
     public void process(ByteBuffer _buffer) {
         int messageType = _buffer.getInt();
         Response response;
-
         switch (messageType) {
             case Response.MSG_CLIENT_REGISTER:
                 _LOGGER.log(Level.FINE, "MSG_CLIENT_REGISTER");

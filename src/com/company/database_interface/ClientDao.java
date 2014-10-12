@@ -9,11 +9,15 @@ import com.company.exception.ClientDoesNotExistException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Jan Marti on 03.10.2014.
  */
 public class ClientDao {
+
+    private static Logger _LOGGER = Logger.getLogger(ClientDao.class.getCanonicalName());
 
     private Connection _connection = null;
 

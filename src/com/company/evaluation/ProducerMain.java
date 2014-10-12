@@ -5,10 +5,15 @@ import com.company.client.MessageService;
 import com.company.client.Queue;
 import com.company.exception.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Created by Jan Marti on 09.10.2014.
  */
 public class ProducerMain {
+
+    private static Logger _LOGGER = Logger.getLogger(ProducerMain.class.getCanonicalName());
 
     public static void main(String[] args) {
         MessageService messageService = new MessageService(args[0], Integer.parseInt(args[1]));
