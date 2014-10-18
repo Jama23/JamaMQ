@@ -3,6 +3,7 @@ package com.company.messaging;
 import com.company.database_model.Message;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,7 @@ public class Response {
     public static final int MSG_QUEUE_DELETE = 5;
     public static final int MSG_QUEUE_ENQUEUE = 6;
     public static final int MSG_QUEUE_DEQUEUE= 7;
+    public static final int MSG_GET_WAITING_QUEUES = 8;
 
     /** Error Codes */
     public static final int ERR_CLIENT_CREATE_EXCEPTION = 11;
@@ -35,6 +37,7 @@ public class Response {
     public static final int ERR_QUEUE_GET_EXCEPTION = 23;
     public static final int ERR_QUEUE_DOES_NOT_EXIST_EXCEPTION = 24;
     public static final int ERR_QUEUE_DELETE_EXCEPTION = 25;
+    public static final int ERR_QUEUE_GET_WAITING_EXCEPTION = 26;
 
     public static final int ERR_MESSAGE_ENQUEUE_EXCEPTION = 31;
     public static final int ERR_SENDER_DOES_NOT_EXIST_EXCEPTION = 32;
@@ -46,6 +49,7 @@ public class Response {
     private final int _status;
     private final int _errorCode;
     private final Message _message;
+    private final ArrayList<Integer> _waitingQueues;
 
     private static Logger _LOGGER = Logger.getLogger(Response.class.getCanonicalName());
 
@@ -57,26 +61,35 @@ public class Response {
         return new Response(STATUS_OK, message);
     }
 
+    public static Response ok(ArrayList<Integer> waitingQueues) {
+        return new Response(STATUS_OK, waitingQueues);
+    }
+
     public static Response err(int errorCode) {
         return new Response(STATUS_ERROR, errorCode);
     }
 
     public Response(int status) {
-        this(status, 0, null);
+        this(status, 0, null, null);
     }
 
     public Response(int status, Message message) {
-        this(status, 0, message);
+        this(status, 0, message, null);
+    }
+
+    public Response(int status, ArrayList<Integer> waitingQueues) {
+        this(status, 0, null, waitingQueues);
     }
 
     public Response(int status, int errorCode) {
-        this(status, errorCode, null);
+        this(status, errorCode, null, null);
     }
 
-    public Response(int status, int errorCode, Message message) {
+    public Response(int status, int errorCode, Message message, ArrayList<Integer> waitingQueues) {
         _status = status;
         _errorCode = errorCode;
         _message = message;
+        _waitingQueues = waitingQueues;
     }
 
     public void serialize(ByteBuffer buffer) {
@@ -91,6 +104,13 @@ public class Response {
             buffer.putInt(_message.getReceiver());
             buffer.putInt(_message.getMessage().getBytes().length);
             buffer.put(_message.getMessage().getBytes());
+        }
+        else if (_waitingQueues != null) {
+            int size = _waitingQueues.size();
+            buffer.putInt(size);
+            for (int waitingQueueId : _waitingQueues) {
+                buffer.putInt(waitingQueueId);
+            }
         }
     }
 }

@@ -105,4 +105,5 @@ public class QueueDaoTest {
         List<Integer> res = _dao.getWaitingQueues(2);
         assertTrue("Retrieved queues not waiting.", (res.get(0) == 3 && res.get(1) == 4) || (res.get(0) == 4 && res.get(1) == 3));
     }
+
 }

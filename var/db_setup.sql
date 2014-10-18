@@ -60,8 +60,8 @@ $BODY$
 declare
      identifier integer;
 begin
-    IF EXISTS(SELECT id FROM queue WHERE Id = $3) THEN
-        IF EXISTS(SELECT id FROM client WHERE Id = $1) THEN
+    IF EXISTS(SELECT id FROM queue WHERE id = $3) THEN
+        IF EXISTS(SELECT id FROM client WHERE id = $1) THEN
 	        INSERT INTO message("sender", "receiver", "queue", "arrivaltime", "message") VALUES($1, $2, $3, $4, $5) RETURNING id into identifier;
             return identifier;
         ELSE
@@ -157,7 +157,8 @@ $BODY$
 declare
 begin
     IF EXISTS(SELECT id FROM queue WHERE id = $1) THEN
-	    DELETE FROM queue WHERE Id = $1;
+	    DELETE FROM queue WHERE id = $1;
+	    DELETE FROM message WHERE queue = $1;
 	ELSE
 	    RAISE 'Queue with id % does not exist.', $1 USING ERRCODE = 'V2004';
 	END IF;
@@ -191,7 +192,7 @@ $BODY$
 declare
 begin
     Return QUERY
-	SELECT DISTINCT queue FROM message WHERE receiver = $1;
+    SELECT DISTINCT queue FROM message WHERE receiver = $1;
 end
 $BODY$
 LANGUAGE plpgsql VOLATILE

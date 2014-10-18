@@ -7,6 +7,7 @@ import com.company.exception.*;
 import com.company.logging.LoggerSingleton;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +60,11 @@ public class ExecutionEngine {
             case Response.MSG_QUEUE_DEQUEUE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_DEQUEUE");
                 response = dequeueMessage(_buffer);
+                response.serialize(_buffer);
+                break;
+            case Response.MSG_GET_WAITING_QUEUES:
+                _LOGGER.log(Level.FINE, "MSG_GET_WAITING_QUEUES");
+                response = getWaitingQueues(_buffer.getInt());
                 response.serialize(_buffer);
                 break;
         }
@@ -214,5 +220,21 @@ public class ExecutionEngine {
             _manager.endDBConnection();
         }
         return ok(m);
+    }
+
+    private Response getWaitingQueues(int clientId) {
+        ArrayList<Integer> waitingQueues = new ArrayList<Integer>();
+        _manager.startDBConnection();
+        _manager.startDBTransaction();
+        try {
+             waitingQueues = _manager.getQueueDao().getWaitingQueues(clientId);
+        } catch (QueueGetWaitingException e) {
+            _manager.abortDBTransaction();
+            return err(ERR_QUEUE_GET_WAITING_EXCEPTION);
+        } finally {
+            _manager.endDBTransaction();
+            _manager.endDBConnection();
+        }
+        return ok(waitingQueues);
     }
 }

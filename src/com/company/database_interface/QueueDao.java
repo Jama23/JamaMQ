@@ -30,7 +30,7 @@ public class QueueDao {
             callStat.execute();
             callStat.close();
         } catch (SQLException e) {
-            if (e.getSQLState().equals("V2003")) { // Custom: Queue already exists
+            if (e.getSQLState().equals("V2003")) {
                 throw new QueueAlreadyExistsException(e);
             }
             throw new QueueCreateException(e);
@@ -44,7 +44,7 @@ public class QueueDao {
             callStat.execute();
             callStat.close();
         } catch (SQLException e) {
-            if (e.getSQLState().equals("V2004")) { // Custom: Queue does not exist
+            if (e.getSQLState().equals("V2004")) {
                 throw new QueueDoesNotExistException(e);
             }
             throw new QueueDeleteException(e);
@@ -62,15 +62,15 @@ public class QueueDao {
             callStat.close();
             return queue;
         } catch (SQLException e) {
-            if (e.getSQLState().equals("V2004")) { // Custom: Queue does not exist
+            if (e.getSQLState().equals("V2004")) {
                 throw new QueueDoesNotExistException(e);
             }
             throw new QueueGetException(e);
         }
     }
 
-    public List<Integer> getWaitingQueues(int receiverId) throws QueueGetWaitingException {
-        List<Integer> result = new ArrayList<Integer>();
+    public ArrayList<Integer> getWaitingQueues(int receiverId) throws QueueGetWaitingException {
+        ArrayList<Integer> result = new ArrayList<Integer>();
         try {
             CallableStatement callStat = _connection.prepareCall("{ call getWaitingQueues(?) }");
             callStat.setInt(1, receiverId);

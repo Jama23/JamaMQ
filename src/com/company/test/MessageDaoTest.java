@@ -100,9 +100,9 @@ public class MessageDaoTest {
         Client c2 = DBModelFactory.createClient(2);
         _cdao.createClient(c2);
         Message m1 = DBModelFactory.createMessage(1, 0, 1, "Hello1");
+        Thread.sleep(2000);
         Message m2 = DBModelFactory.createMessage(2, 0, 1, "Hello2");
         _mdao.enqueueMessage(m1);
-        Thread.sleep(2000);
         _mdao.enqueueMessage(m2);
         Message m = _mdao.dequeueMessage(3, 0, 1, false);
         assertEquals("Dequeue topmost message does not work. Sender not correct.", m1.getSender(), m.getSender());
@@ -112,18 +112,37 @@ public class MessageDaoTest {
         assertEquals("Dequeue topmost message does not work. Message not correct.", m1.getMessage(), m.getMessage());
     }
 
-    /*@Test(expected=MessageDequeueQueueDoesNotExistException.class)
+    @Test(expected=MessageDequeueQueueDoesNotExistException.class)
     public void testDequeueMessage_MessageDequeueQueueDoesNotExistException() throws Exception {
-
+        Message m = _mdao.dequeueMessage(1, 0, 1, false);
     }
 
     @Test(expected=MessageDequeueEmptyQueueException.class)
     public void testDequeueMessage_MessageDequeueEmptyQueueException() throws Exception {
-
+        Queue q = DBModelFactory.createQueue(1);
+        _qdao.createQueue(q);
+        Client c1 = DBModelFactory.createClient(1);
+        _cdao.createClient(c1);
+        Message m1 = DBModelFactory.createMessage(1, 0, 1, "Hello1");
+        Thread.sleep(2000);
+        Message m2 = DBModelFactory.createMessage(1, 0, 1, "Hello2");
+        _mdao.enqueueMessage(m1);
+        _mdao.enqueueMessage(m2);
+        Message m4 = _mdao.dequeueMessage(3, 0, 1, false);
+        Message m5 = _mdao.dequeueMessage(3, 0, 1, false);
+        Message m6 = _mdao.dequeueMessage(3, 0, 1, false);
     }
 
     @Test(expected=MessageDequeueNotIntendedReceiverException.class)
     public void testDequeueMessage_MessageDequeueNotIntendedReceiverException() throws Exception {
-
-    }*/
+        Queue q = DBModelFactory.createQueue(1);
+        _qdao.createQueue(q);
+        Client c1 = DBModelFactory.createClient(1);
+        _cdao.createClient(c1);
+        Client c2 = DBModelFactory.createClient(2);
+        _cdao.createClient(c2);
+        Message m1 = DBModelFactory.createMessage(1, 3, 1, "Hello1");
+        _mdao.enqueueMessage(m1);
+        Message m2 = _mdao.dequeueMessage(2, 1, 0, false);
+    }
 }

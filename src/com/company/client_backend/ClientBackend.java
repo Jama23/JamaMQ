@@ -1,4 +1,4 @@
-package com.company.client;
+package com.company.client_backend;
 
 import com.company.exception.*;
 import com.company.messaging.Response;
@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,10 +26,12 @@ public class ClientBackend {
     private int _port;
 
     private int _clientId;
+    public boolean _registered;
 
     public ClientBackend(String host, int port) {
         _host = host;
         _port = port;
+        _registered = false;
         init(_host, _port);
     }
 
@@ -53,8 +56,8 @@ public class ClientBackend {
      * Registers a client
      * Used by class MessageService
      */
-    public void register(String clientId) throws ClientAlreadyExistsException, ClientRegisterFailureException {
-        _clientId = clientId.hashCode();
+    public void register(int clientId) throws ClientAlreadyExistsException, ClientRegisterFailureException {
+        _clientId = clientId;
         try {
             _out.writeInt(8); //Size
             _out.writeInt(Response.MSG_CLIENT_REGISTER);
@@ -73,6 +76,7 @@ public class ClientBackend {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        _registered = true;
     }
 
     /**
@@ -87,11 +91,11 @@ public class ClientBackend {
             _out.flush();
 
             int messageType = _in.readInt();
-            if(messageType != Response.STATUS_OK) {
+            if (messageType != Response.STATUS_OK) {
                 int errorCode = _in.readInt();
-                if(errorCode == Response.ERR_CLIENT_DELETE_EXCEPTION) {
+                if (errorCode == Response.ERR_CLIENT_DELETE_EXCEPTION) {
                     throw new ClientDeregisterFailureException(new Exception());
-                } else if(errorCode == Response.ERR_CLIENT_DOES_NOT_EXIST_EXCEPTION) {
+                } else if (errorCode == Response.ERR_CLIENT_DOES_NOT_EXIST_EXCEPTION) {
                     throw new ClientDoesNotExistException(new Exception());
                 }
             }
@@ -99,17 +103,18 @@ public class ClientBackend {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        _registered = false;
     }
 
     /**
      * Creates a queue
      * Used by class MessageService
      */
-    public Queue createQueue(String queueId) throws QueueCreateException, QueueAlreadyExistsException {
+    public Queue createQueue(int queueId) throws QueueCreateException, QueueAlreadyExistsException {
         try {
             _out.writeInt(8); //Size
             _out.writeInt(Response.MSG_QUEUE_CREATE);
-            _out.writeInt(queueId.hashCode());
+            _out.writeInt(queueId);
             _out.flush();
 
             int messageType = _in.readInt();
@@ -121,7 +126,7 @@ public class ClientBackend {
                     throw new QueueAlreadyExistsException(new Exception());
                 }
             }
-            return new Queue(this, queueId.hashCode());
+            return new Queue(this, queueId);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -131,11 +136,11 @@ public class ClientBackend {
      * Gets a queue
      * Used by class MessageService
      */
-    public Queue getQueue(String queueId) throws QueueGetException, QueueDoesNotExistException{
+    public Queue getQueue(int queueId) throws QueueGetException, QueueDoesNotExistException {
         try {
             _out.writeInt(8); //Size
             _out.writeInt(Response.MSG_QUEUE_GET);
-            _out.writeInt(queueId.hashCode());
+            _out.writeInt(queueId);
             _out.flush();
 
             int messageType = _in.readInt();
@@ -147,7 +152,7 @@ public class ClientBackend {
                     throw new QueueDoesNotExistException(new Exception());
                 }
             }
-            return new Queue(this, queueId.hashCode());
+            return new Queue(this, queueId);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -157,11 +162,11 @@ public class ClientBackend {
      * Deletes a queue
      * Used by class MessageService
      */
-    public void deleteQueue(String queueId) throws QueueDeleteException, QueueDoesNotExistException {
+    public void deleteQueue(int queueId) throws QueueDeleteException, QueueDoesNotExistException {
         try {
             _out.writeInt(8); //Size
             _out.writeInt(Response.MSG_QUEUE_DELETE);
-            _out.writeInt(queueId.hashCode());
+            _out.writeInt(queueId);
             _out.flush();
 
             int messageType = _in.readInt();
@@ -251,6 +256,33 @@ public class ClientBackend {
             //Create object
             Message message = new Message(sender, receiver, new String(msg));
             return message;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Integer> getWaitingQueueIds() throws QueueGetWaitingException {
+        try {
+            _out.writeInt(8); //Size
+            _out.writeInt(Response.MSG_GET_WAITING_QUEUES);
+            _out.writeInt(_clientId);
+            _out.flush();
+
+            int messageType = _in.readInt();
+            if(messageType != Response.STATUS_OK) {
+                int errorCode = _in.readInt();
+                if(errorCode == Response.ERR_QUEUE_GET_WAITING_EXCEPTION) {
+                    throw new QueueGetWaitingException(new Exception());
+                }
+            }
+
+            int size = _in.readInt();
+            ArrayList<Integer> waitingQueues = new ArrayList<Integer>(size);
+            for (int i = 0; i < size; i++) {
+                waitingQueues.add(i, _in.readInt());
+            }
+
+            return waitingQueues;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

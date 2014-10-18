@@ -1,4 +1,4 @@
-package com.company.client;
+package com.company.client_backend;
 
 /**
  * Created by Jan Marti on 08.10.2014.

@@ -1,8 +1,8 @@
 package com.company.evaluation;
 
-import com.company.client.Message;
+import com.company.client_backend.Message;
 import com.company.client.MessageService;
-import com.company.client.Queue;
+import com.company.client_backend.Queue;
 import com.company.exception.*;
 
 /**
@@ -12,8 +12,8 @@ public class ConsumerMain {
     public static void main(String[] args) {
         MessageService messageService = new MessageService(args[0], Integer.parseInt(args[1]));
         try {
-            messageService.register("Client2");
-            Queue q = messageService.getQueue("Queue1");
+            messageService.register(2);
+            Queue q = messageService.getQueue(1);
             Message m = q.dequeueMessage();
             System.out.println(m.getMessage());
             messageService.deregister();
@@ -36,6 +36,8 @@ public class ConsumerMain {
         } catch (ClientDoesNotExistException e) {
             e.printStackTrace();
         } catch (ClientDeregisterFailureException e) {
+            e.printStackTrace();
+        } catch (ClientNotRegisteredException e) {
             e.printStackTrace();
         }
     }

@@ -1,9 +1,11 @@
 package com.company.client;
 
+import com.company.client_backend.ClientBackend;
+import com.company.client_backend.Message;
+import com.company.client_backend.Queue;
 import com.company.exception.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Jan Marti on 08.10.2014.
@@ -15,7 +17,7 @@ public class MessageService {
 
     public MessageService(String host, int port) { _backend = new ClientBackend(host, port); }
 
-    public void register(String clientId) throws ClientAlreadyExistsException, ClientRegisterFailureException {
+    public void register(int clientId) throws ClientAlreadyExistsException, ClientRegisterFailureException {
         _backend.register(clientId);
     }
 
@@ -23,24 +25,44 @@ public class MessageService {
         _backend.deregister();
     }
 
-    public Queue createQueue(String queueId) throws QueueAlreadyExistsException, QueueCreateException {
-        return _backend.createQueue(queueId);
+    public Queue createQueue(int queueId) throws QueueAlreadyExistsException, QueueCreateException, ClientNotRegisteredException {
+        if (_backend._registered) {
+            return _backend.createQueue(queueId);
+        } else {
+            throw new ClientNotRegisteredException(new Exception());
+        }
     }
 
-    public Queue getQueue(String queueId) throws QueueDoesNotExistException, QueueGetException {
-        return _backend.getQueue(queueId);
+    public Queue getQueue(int queueId) throws QueueDoesNotExistException, QueueGetException, ClientNotRegisteredException {
+        if (_backend._registered) {
+            return _backend.getQueue(queueId);
+        } else {
+            throw new ClientNotRegisteredException(new Exception());
+        }
     }
 
-    public void deleteQueue(String queueId) throws QueueDoesNotExistException, QueueDeleteException {
-        _backend.deleteQueue(queueId);
+    public void deleteQueue(int queueId) throws QueueDoesNotExistException, QueueDeleteException, ClientNotRegisteredException {
+        if (_backend._registered) {
+            _backend.deleteQueue(queueId);
+        } else {
+            throw new ClientNotRegisteredException(new Exception());
+        }
     }
 
-    public List<Integer> getWaitingQueueIds() {
-        return new ArrayList<Integer>(1);
+    public ArrayList<Integer> getWaitingQueueIds() throws QueueGetWaitingException, ClientNotRegisteredException {
+        if (_backend._registered) {
+            return _backend.getWaitingQueueIds();
+        } else {
+            throw new ClientNotRegisteredException(new Exception());
+        }
     }
 
-    public Message getMessageFromSender(String sender) {
-        return new Message(0,0,"0");
+    public Message getMessageFromSender(int sender) throws MessageDequeueQueueDoesNotExistException, MessageDequeueException, MessageDequeueNotIntendedReceiverException, MessageDequeueEmptyQueueException, ClientNotRegisteredException {
+        if (_backend._registered) {
+            return _backend.getMessage(0, sender, false);
+        } else {
+            throw new ClientNotRegisteredException(new Exception());
+        }
     }
 
 }

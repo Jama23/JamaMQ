@@ -74,7 +74,7 @@ public class MessageDao {
                     throw new MessageDequeueQueueDoesNotExistException(e);
                 } else if (e.getSQLState().equals("V2008")) {
                     throw new MessageDequeueEmptyQueueException(e);
-                } else if (e.getSQLState().equals("V2009") || e.getSQLState().equals("V2010")) {
+                } else if (e.getSQLState().equals("V2009") || e.getSQLState().equals("V2010") || e.getSQLState().equals("V2011")) {
                     throw new MessageDequeueNotIntendedReceiverException(e);
                 }
                 throw new MessageDequeueException(new Exception());

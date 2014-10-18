@@ -1,5 +1,7 @@
 package com.company.client;
 
+import com.company.client_backend.Message;
+
 /**
  * Created by Jan Marti on 08.10.2014.
  * This class creates a client message that will be enqueued

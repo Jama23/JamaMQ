@@ -2,7 +2,7 @@ package com.company.evaluation;
 
 import com.company.client.MessageFactory;
 import com.company.client.MessageService;
-import com.company.client.Queue;
+import com.company.client_backend.Queue;
 import com.company.exception.*;
 
 /**
@@ -13,8 +13,8 @@ public class EvaluationMain {
     public static void main(String[] args) {
         MessageService messageService = new MessageService(args[0], Integer.parseInt(args[1]));
         try {
-            messageService.register("Client1");
-            Queue q = messageService.createQueue("Queue1");
+            messageService.register(1);
+            Queue q = messageService.createQueue(1);
             q.enqueueMessage(MessageFactory.createMessage("Hello JamaMQ"));
             messageService.deregister();
         } catch (ClientAlreadyExistsException e) {
@@ -34,6 +34,8 @@ public class EvaluationMain {
         } catch (QueueCreateException e) {
             e.printStackTrace();
         } catch (MessageEnqueueSenderDoesNotExistException e) {
+            e.printStackTrace();
+        } catch (ClientNotRegisteredException e) {
             e.printStackTrace();
         }
     }

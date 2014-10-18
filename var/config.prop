@@ -1,6 +1,6 @@
 # Database
 db.server.name: localhost
-db.server.port: 2323
+db.server.port: 5432
 db.database.name: jamamq
 db.user: jamamquser
 db.password: jamamqpw
@@ -9,5 +9,5 @@ db.pool.initial: 10
 
 # Messaging Service
 ms.pool.max: 10
-net.interface.ip: 127.0.0.1
+net.interface.ip: 0.0.0.0
 net.interface.port: 5555

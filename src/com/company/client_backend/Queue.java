@@ -1,5 +1,7 @@
-package com.company.client;
+package com.company.client_backend;
 
+import com.company.client_backend.ClientBackend;
+import com.company.client_backend.Message;
 import com.company.exception.*;
 
 /**
