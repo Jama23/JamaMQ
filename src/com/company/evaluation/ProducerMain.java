@@ -18,10 +18,11 @@ public class ProducerMain {
     public static void main(String[] args) {
         MessageService messageService = new MessageService(args[0], Integer.parseInt(args[1]));
         try {
-            messageService.register(2);
-            ArrayList<Integer> waitingQueues = messageService.getWaitingQueueIds();
+            messageService.register(1);
             Queue q = messageService.createQueue(1);
-            q.enqueueMessage(MessageFactory.createMessage("Hello JamaMQ"));
+            for (int i = 0; i < 10; i++) {
+                q.enqueueMessage(MessageFactory.createMessage("Hello JamaMQ."));
+            }
             messageService.deregister();
         } catch (ClientAlreadyExistsException e) {
             e.printStackTrace();
@@ -40,8 +41,6 @@ public class ProducerMain {
         } catch (QueueCreateException e) {
             e.printStackTrace();
         } catch (MessageEnqueueSenderDoesNotExistException e) {
-            e.printStackTrace();
-        } catch (QueueGetWaitingException e) {
             e.printStackTrace();
         } catch (ClientNotRegisteredException e) {
             e.printStackTrace();

@@ -4,8 +4,8 @@ db.server.port: 5432
 db.database.name: jamamq
 db.user: jamamquser
 db.password: jamamqpw
-db.pool.max: 10
-db.pool.initial: 10
+db.pool.max: 1
+db.pool.initial: 1
 
 # Messaging Service
 ms.pool.max: 10
