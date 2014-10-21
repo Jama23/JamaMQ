@@ -5,7 +5,6 @@ import com.company.client.MessageService;
 import com.company.client_backend.Message;
 import com.company.client_backend.Queue;
 import com.company.exception.*;
-import com.company.logging.LoggerSingleton;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,9 +12,9 @@ import java.util.logging.Logger;
 /**
  * Created by Jan Marti on 19.10.2014.
  */
-public class MainClient implements Runnable {
+public class ClientMain implements Runnable {
 
-    private static Logger _LOGGER = Logger.getLogger(MainClient.class.getCanonicalName());
+    private static Logger _LOGGER = Logger.getLogger(ClientMain.class.getCanonicalName());
     //private static com.company.logging.Logger _EVALLOG = LoggerSingleton.getLogger();
 
     private String _host;
@@ -27,34 +26,44 @@ public class MainClient implements Runnable {
     private final int _consumerCount;
     private final int _getPerConsCount;
 
+    private final boolean _dbPopulated;
+
     private Producer[] _producers;
     private Consumer[] _consumers;
 
 
     public static void main(String[] args) {
-        if(args.length != 6) {
-            System.out.println("Argument missing: host, port, number of producers, puts per producer, number of consumers, gets per consumer.");
+        if(args.length != 7) {
+            System.out.println("Arguments needed: host (string), port (int), number of producers (int), puts per producer (int), number of consumers (int), gets per consumer (int), populated or empty db (boolean).");
         }
         else {
-            MainClient mainClient = new MainClient(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]));
-            new Thread(mainClient).start();
+            ClientMain clientMain = new ClientMain(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Boolean.parseBoolean(args[6]));
+            new Thread(clientMain).start();
         }
     }
 
-    public MainClient(String host, int port, int producerCount, int putPerProdCount, int consumerCount, int getPerConsCount) {
+    public ClientMain(String host, int port, int producerCount, int putPerProdCount, int consumerCount, int getPerConsCount, boolean dbPopulated) {
         _host = host;
         _port = port;
         _producerCount = producerCount;
         _putPerProdCount = putPerProdCount;
         _consumerCount = consumerCount;
         _getPerConsCount = getPerConsCount;
+        _dbPopulated = dbPopulated;
     }
 
     private void setUp() {
         MessageService messageService = new MessageService(_host, _port);
         try {
             messageService.register(1);
-            messageService.createQueue(1);
+            Queue _queue = messageService.createQueue(1);
+            if (_dbPopulated) {
+                _LOGGER.log(Level.INFO, "Populating of db started..");
+                for (int i = 0; i < 10000; i++) {
+                    _queue.enqueueMessage(MessageFactory.createMessage("Hello JamaMQ. I'm just an initial load message."));
+                }
+                _LOGGER.log(Level.INFO, "Populating of db ended.");
+            }
             messageService.deregister();
         } catch (ClientAlreadyExistsException e) {
             e.printStackTrace();
@@ -69,6 +78,12 @@ public class MainClient implements Runnable {
         } catch (ClientDoesNotExistException e) {
             e.printStackTrace();
         } catch (ClientDeregisterFailureException e) {
+            e.printStackTrace();
+        } catch (MessageEnqueueQueueDoesNotExistException e) {
+            e.printStackTrace();
+        } catch (MessageEnqueueException e) {
+            e.printStackTrace();
+        } catch (MessageEnqueueSenderDoesNotExistException e) {
             e.printStackTrace();
         }
 

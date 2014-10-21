@@ -5,7 +5,7 @@
     <property name="build.dir"  location="bin"/>
     <property name="lib.dir"    location="lib"/>
     <property name="main-class" value="com.company.messaging.MessagingMain"/>
-    <property name="mainclient-class" value="com.company.evaluation.MainClient"/>
+    <property name="mainclient-class" value="com.company.evaluation.ClientMain"/>
     <property name="producer-class" value="com.company.evaluation.ProducerMain"/>
     <property name="consumer-class" value="com.company.evaluation.ConsumerMain"/>
     <path id="classpath">
@@ -44,6 +44,7 @@
             <arg value="1000"/>
             <arg value="10"/>
             <arg value="1000"/>
+            <arg value="true"/>
         </java>
     </target>
 
