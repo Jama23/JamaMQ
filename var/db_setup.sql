@@ -2,26 +2,6 @@
 -- Postgresql Database Setup -- JamaMQ -- October 2014 _-------------------------------
 ---------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------
-
-
-
----------------------------------------------------------------------------------------
--- Clean Database
----------------------------------------------------------------------------------------
-DROP DATABASE jamamq;
-
-
-
----------------------------------------------------------------------------------------
--- Initialize Database
----------------------------------------------------------------------------------------
-CREATE DATABASE jamamq
-  WITH OWNER = postgres
-       ENCODING = 'UTF8'
-       TABLESPACE = pg_default
-       LC_COLLATE = 'German_Switzerland.1252'
-       LC_CTYPE = 'German_Switzerland.1252'
-       CONNECTION LIMIT = -1;
 	   
 CREATE TABLE Message
 (
@@ -273,3 +253,15 @@ CREATE INDEX "client-id-index"
   ON client
   USING btree
   (id);
+
+
+
+---------------------------------------------------------------------------------------
+-- User
+---------------------------------------------------------------------------------------
+
+CREATE USER jamamquser WITH PASSWORD 'jamamqpassword';
+GRANT ALL PRIVILEGES ON DATABASE jamamq to jamamquser;
+GRANT ALL PRIVILEGES ON TABLE Message, Queue, Client TO jamamquser;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO jamamquser;
+ALTER DATABASE jamamq OWNER TO jamamquser;
