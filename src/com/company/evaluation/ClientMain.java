@@ -5,6 +5,7 @@ import com.company.client.MessageService;
 import com.company.client_backend.Message;
 import com.company.client_backend.Queue;
 import com.company.exception.*;
+import com.company.logging.LoggerEval;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 public class ClientMain implements Runnable {
 
     private static Logger _LOGGER = Logger.getLogger(ClientMain.class.getCanonicalName());
-    //private static com.company.logging.Logger _EVALLOG = LoggerSingleton.getLogger();
+    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger1();
 
     private String _host;
     private int _port;
@@ -27,22 +28,25 @@ public class ClientMain implements Runnable {
     private final int _getPerConsCount;
 
     private final boolean _dbPopulated;
+    private final int _populationSize;
+
+    private final int _messageSize;
 
     private Producer[] _producers;
     private Consumer[] _consumers;
 
 
-    public static void main(String[] args) {
-        if(args.length != 7) {
-            System.out.println("Arguments needed: host (string), port (int), number of producers (int), puts per producer (int), number of consumers (int), gets per consumer (int), populated or empty db (boolean).");
+    /*public static void main(String[] args) {
+        if(args.length != 9) {
+            System.out.println("Arguments needed: host (string), port (int), number of producers (int), puts per producer (int), number of consumers (int), gets per consumer (int), populated or empty db (boolean), population size (int), message size(int)");
         }
         else {
-            ClientMain clientMain = new ClientMain(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Boolean.parseBoolean(args[6]));
+            ClientMain clientMain = new ClientMain(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Boolean.parseBoolean(args[6]), Integer.parseInt(args[7]), Integer.parseInt(args[8]));
             new Thread(clientMain).start();
         }
-    }
+    }*/
 
-    public ClientMain(String host, int port, int producerCount, int putPerProdCount, int consumerCount, int getPerConsCount, boolean dbPopulated) {
+    public ClientMain(String host, int port, int producerCount, int putPerProdCount, int consumerCount, int getPerConsCount, boolean dbPopulated, int populationSize, int messageSize) {
         _host = host;
         _port = port;
         _producerCount = producerCount;
@@ -50,16 +54,19 @@ public class ClientMain implements Runnable {
         _consumerCount = consumerCount;
         _getPerConsCount = getPerConsCount;
         _dbPopulated = dbPopulated;
+        _populationSize = populationSize;
+        _messageSize = messageSize;
     }
 
     private void setUp() {
+
         MessageService messageService = new MessageService(_host, _port);
         try {
             messageService.register(1);
             Queue _queue = messageService.createQueue(1);
             if (_dbPopulated) {
                 _LOGGER.log(Level.INFO, "Populating of db started..");
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < _populationSize; i++) {
                     _queue.enqueueMessage(MessageFactory.createMessage("Hello JamaMQ. I'm just an initial load message."));
                 }
                 _LOGGER.log(Level.INFO, "Populating of db ended.");
@@ -168,7 +175,7 @@ public class ClientMain implements Runnable {
 
     public class Producer extends ClientThread {
 
-        protected long startTime, stopTime, elapsedTime;
+        protected long clientStartTime, clientStopTime, elapsedTime, startTime, stopTime;
 
         public Producer(String host, int port, int clientId, int queueId) {
             super(host, port, clientId, queueId);
@@ -177,10 +184,46 @@ public class ClientMain implements Runnable {
         @Override
         public void run() {
             _LOGGER.log(Level.INFO, "Client " + _clientId + " started.");
-            startTime = System.nanoTime();
+            Message message;
+            switch (_messageSize) {
+                case 200:
+                    message = MessageFactory.createMessage("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                           "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+                    break;
+                case 2000:
+                    message = MessageFactory.createMessage("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                           "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+                    break;
+                default:
+                    message = MessageFactory.createMessage("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789" +
+                            "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+                    break;
+            }
+            clientStartTime = System.nanoTime();
             for (int i = 0; i < _putPerProdCount; i++) {
                 try {
-                    _queue.enqueueMessage(MessageFactory.createMessage("Client " + _clientId + " write: Hello Reader. Message " + (i+1)));
+                    startTime = System.nanoTime();
+                    _queue.enqueueMessage(message);
+                    stopTime = System.nanoTime();
+                    _EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_ENQUEUE");
                 } catch (MessageEnqueueException e) {
                     e.printStackTrace();
                 } catch (MessageEnqueueSenderDoesNotExistException e) {
@@ -189,8 +232,8 @@ public class ClientMain implements Runnable {
                     e.printStackTrace();
                 }
             }
-            stopTime = System.nanoTime();
-            elapsedTime = (stopTime-startTime)/1000000000;
+            clientStopTime = System.nanoTime();
+            elapsedTime = (clientStopTime-clientStartTime)/1000000000;
             tearDown();
             _LOGGER.log(Level.INFO, "Client " + _clientId + " stopped. Elapsed time: " + elapsedTime + " seconds.");
         }
@@ -199,7 +242,7 @@ public class ClientMain implements Runnable {
 
     public class Consumer extends ClientThread {
 
-        protected long startTime, stopTime, elapsedTime;
+        protected long clientStartTime, clientStopTime, elapsedTime, startTime, stopTime;
 
         public Consumer(String host, int port, int clientId, int queueId) {
             super(host, port, clientId, queueId);
@@ -208,11 +251,13 @@ public class ClientMain implements Runnable {
         @Override
         public void run() {
             _LOGGER.log(Level.INFO, "Client " + _clientId + " started.");
-            startTime = System.nanoTime();
+            clientStartTime = System.nanoTime();
             for (int i = 0; i < _getPerConsCount; i++) {
                 try {
+                    startTime = System.nanoTime();
                     Message message = _queue.dequeueMessage();
-                    //_LOGGER.log(Level.INFO, "Client " + _clientId + " read: " + message.getMessage());
+                    stopTime = System.nanoTime();
+                    _EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_DEQUEUE");
                 } catch (MessageDequeueQueueDoesNotExistException e) {
                     e.printStackTrace();
                 } catch (MessageDequeueException e) {
@@ -221,12 +266,12 @@ public class ClientMain implements Runnable {
                     e.printStackTrace();
                 } catch (MessageDequeueEmptyQueueException e) {
                     //e.printStackTrace();
-                    //_LOGGER.log(Level.INFO, "Nothing to dequeue. Empty queue.");
+                    // Does not count as dequeue operation
                     i = i-1;
                 }
             }
-            stopTime = System.nanoTime();
-            elapsedTime = (stopTime-startTime)/1000000000;
+            clientStopTime = System.nanoTime();
+            elapsedTime = (clientStopTime-clientStartTime)/1000000000;
             tearDown();
             _LOGGER.log(Level.INFO, "Client " + _clientId + " stopped. Elapsed time: " + elapsedTime + " seconds.");
         }

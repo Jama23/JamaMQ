@@ -36,8 +36,8 @@ public class Queue {
     /**
      * Dequeues message from specific sender from queue
      */
-    public Message dequeueMessageFromSender(String sender) throws MessageDequeueQueueDoesNotExistException, MessageDequeueException, MessageDequeueNotIntendedReceiverException, MessageDequeueEmptyQueueException {
-        return _clientBackend.getMessage(_id, sender.hashCode(), false);
+    public Message dequeueMessageFromSender(int sender) throws MessageDequeueQueueDoesNotExistException, MessageDequeueException, MessageDequeueNotIntendedReceiverException, MessageDequeueEmptyQueueException {
+        return _clientBackend.getMessage(_id, sender, false);
     }
 
     /**

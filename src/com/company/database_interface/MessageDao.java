@@ -3,6 +3,7 @@ package com.company.database_interface;
 import com.company.database_model.DBModelFactory;
 import com.company.database_model.Message;
 import com.company.exception.*;
+import com.company.logging.LoggerEval;
 
 import java.sql.*;
 
@@ -12,6 +13,7 @@ import java.sql.*;
 public class MessageDao {
 
     private Connection _connection = null;
+    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger2();
 
     public MessageDao(Connection connection) {
         _connection = connection;
@@ -25,7 +27,13 @@ public class MessageDao {
             callStat.setInt(3, message.getQueue());
             callStat.setTimestamp(4, message.getArrivalTime());
             callStat.setString(5, message.getMessage());
+
+            long startTime = System.nanoTime();
             callStat.execute();
+            long stopTime = System.nanoTime();
+            _EVALLOG.log(startTime + "," + stopTime + ",DB_LATENCY_ENQUEUE");
+
+
             callStat.close();
         } catch (SQLException e) {
             if (e.getSQLState().equals("V2005")) {
@@ -62,7 +70,12 @@ public class MessageDao {
                 }
                 callStat.setInt(4, 0);
 
+                long startTime = System.nanoTime();
                 ResultSet resSet = callStat.executeQuery();
+                long stopTime = System.nanoTime();
+                _EVALLOG.log(startTime + "," + stopTime + ",DB_LATENCY_DEQUEUE");
+
+
                 resSet.next(); // if result set is empty we get an exception
                 Message message = DBModelFactory.createMessage(resSet.getInt(1), resSet.getInt(2), resSet.getInt(3),
                         resSet.getInt(4), resSet.getTimestamp(5), resSet.getString(6));

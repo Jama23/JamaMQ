@@ -1,6 +1,6 @@
 package com.company.messaging;
 
-import com.company.logging.LoggerSingleton;
+import com.company.logging.LoggerEval;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,21 +23,19 @@ public class MessagingMain {
 
         String date = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date(System.currentTimeMillis()));
         String configFilePath = "var/config.prop";
-        String logPath = "log/" + date + "-log.csv";
+        String log1Path = "log/mwlog-f-" + date + ".csv";
+        String log2Path = "log/mwlog-b-" + date + ".csv";
 
-        if(args.length >= 1) {
-            configFilePath = args[0];
-        }
+        LoggerEval.initLogger1(log1Path);
+        LoggerEval.initLogger2(log2Path);
 
         Configuration.initConfig(configFilePath);
-        Configuration.putProperty("log.eval.path", logPath);
 
         MessagingMain mm = new MessagingMain();
         mm.start();
     }
 
     public MessagingMain() {
-        LoggerSingleton.initLogger(Configuration.getProperty("log.eval.path"));
         _executor = Executors.newFixedThreadPool(Integer.parseInt(Configuration.getProperty("ms.pool.max")));
         System.out.println("Starting executor threads: ");
         for(int i = 0; i < Integer.parseInt(Configuration.getProperty("ms.pool.max")); i++) {

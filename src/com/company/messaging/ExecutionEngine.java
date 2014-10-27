@@ -4,7 +4,6 @@ import com.company.database_interface.DaoManager;
 import com.company.database_model.DBModelFactory;
 import com.company.database_model.Message;
 import com.company.exception.*;
-import com.company.logging.LoggerSingleton;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import static com.company.messaging.Response.*;
 public class ExecutionEngine {
 
     private static Logger _LOGGER = Logger.getLogger(ExecutionEngine.class.getCanonicalName());
-    private static com.company.logging.Logger _EVALLOG = LoggerSingleton.getLogger();
+    //private static com.company.logging.Logger _EVALLOG = LoggerSingleton.getLogger1();
 
     private DaoManager _manager = new DaoManager();
 
@@ -32,67 +31,67 @@ public class ExecutionEngine {
         switch (messageType) {
             case Response.MSG_CLIENT_REGISTER:
                 _LOGGER.log(Level.FINE, "MSG_CLIENT_REGISTER");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = registerClient(_buffer.getInt());
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_CLIENT_REGISTER");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_CLIENT_REGISTER");
                 break;
             case Response.MSG_CLIENT_DEREGISTER:
                 _LOGGER.log(Level.FINE, "MSG_CLIENT_DEREGISTER");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = deregisterClient(_buffer.getInt());
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_CLIENT_DEREGISTER");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_CLIENT_DEREGISTER");
                 break;
             case Response.MSG_QUEUE_CREATE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_CREATE");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = createQueue(_buffer.getInt());
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_CREATE");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_CREATE");
                 break;
             case Response.MSG_QUEUE_GET:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_GET");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = getQueue(_buffer.getInt());
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_GET");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_GET");
                 break;
             case Response.MSG_QUEUE_DELETE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_DELETE");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = deleteQueue(_buffer.getInt());
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_DELETE");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_DELETE");
                 break;
             case Response.MSG_QUEUE_ENQUEUE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_ENQUEUE");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = enqueueMessage(_buffer);
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_ENQUEUE");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_ENQUEUE");
                 break;
             case Response.MSG_QUEUE_DEQUEUE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_DEQUEUE");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = dequeueMessage(_buffer);
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_DEQUEUE");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_DEQUEUE");
                 break;
             case Response.MSG_GET_WAITING_QUEUES:
                 _LOGGER.log(Level.FINE, "MSG_GET_WAITING_QUEUES");
-                startTime = System.nanoTime();
+                //startTime = System.nanoTime();
                 response = getWaitingQueues(_buffer.getInt());
-                stopTime = System.nanoTime();
+                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                _EVALLOG.log(startTime + "," + stopTime + ",MSG_GET_WAITING_QUEUES");
+                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_GET_WAITING_QUEUES");
                 break;
         }
         _LOGGER.log(Level.FINE, "End of execution engine process");
