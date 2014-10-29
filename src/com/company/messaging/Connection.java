@@ -12,28 +12,36 @@ import java.util.logging.Logger;
 public class Connection implements Runnable {
 
     private static Logger _LOGGER = Logger.getLogger(Connection.class.getCanonicalName());
-    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger1();
+    private static com.company.logging.Logger _EVALLOG1 = LoggerEval.getLogger1();
+    private static com.company.logging.Logger _EVALLOG2 = LoggerEval.getLogger3();
 
     private final ByteBuffer _buffer;
     private final Callback _callback;
 
-    public Connection(ByteBuffer buffer, Callback callback) {
+    private final long _startTime;
+
+    public Connection(long startTime, ByteBuffer buffer, Callback callback) {
         _buffer = buffer;
         _callback = callback;
+
+        _startTime = startTime;
     }
 
     @Override
     public void run() {
+        long stopTime = System.nanoTime();
         _LOGGER.log(Level.FINE, "Running executor: " + Thread.currentThread().getId());
 
-        long startTime = System.nanoTime();
+        //long startTime = System.nanoTime();
 
         ExecutionEngine executionEngine = new ExecutionEngine();
         executionEngine.process(_buffer);
         // calling the callback to register a write interest on the selector.
         _callback.callback();
 
-        long stopTime = System.nanoTime();
-        _EVALLOG.log(startTime + "," + stopTime + ",MW_LATENCY");
+        long stopTime2 = System.nanoTime();
+
+        _EVALLOG1.log(stopTime + "," + stopTime2 + ",MS_LATENCY");
+        _EVALLOG2.log(_startTime + "," + stopTime + ",EXEC_WAIT_TIME");
     }
 }

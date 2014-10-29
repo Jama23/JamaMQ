@@ -1,5 +1,7 @@
 package com.company.messaging;
 
+import com.company.logging.LoggerEval;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -86,7 +88,8 @@ public class ConnectionHandler implements Runnable {
             // submit a client to the executor service
             _buffer.flip();
             _buffer.position(4);
-            _executor.submit(new Connection(_buffer,
+            long startTime = System.nanoTime();
+            _executor.submit(new Connection(startTime, _buffer,
                     // register the write back callback
                     new Callback() {
                         @Override

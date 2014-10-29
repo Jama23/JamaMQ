@@ -1,9 +1,9 @@
 package com.company.database_interface;
 
+import com.company.logging.LoggerEval;
 import com.company.messaging.Configuration;
 import org.postgresql.ds.PGPoolingDataSource;
 
-import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class PGConnectionPool {
 
     private static Logger _LOGGER = Logger.getLogger(PGConnectionPool.class.getCanonicalName());
+    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger4();
 
     private static PGConnectionPool _INSTANCE = null;
     private PGPoolingDataSource _source;
@@ -40,7 +41,10 @@ public class PGConnectionPool {
     public synchronized Connection getConnection() {
         Connection con = null;
         try {
+            long startTime = System.nanoTime();
             con = _source.getConnection();
+            long stopTime = System.nanoTime();
+            _EVALLOG.log(startTime + "," + stopTime + ",PG_CONN_WAIT");
         } catch (SQLException e) {
             _LOGGER.log(Level.SEVERE, "Could not retrieve connection from the connection pool.");
             throw new RuntimeException(e);

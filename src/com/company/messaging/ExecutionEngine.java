@@ -4,6 +4,7 @@ import com.company.database_interface.DaoManager;
 import com.company.database_model.DBModelFactory;
 import com.company.database_model.Message;
 import com.company.exception.*;
+import com.company.logging.LoggerEval;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import static com.company.messaging.Response.*;
 public class ExecutionEngine {
 
     private static Logger _LOGGER = Logger.getLogger(ExecutionEngine.class.getCanonicalName());
-    //private static com.company.logging.Logger _EVALLOG = LoggerSingleton.getLogger1();
+    //private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger4();
 
     private DaoManager _manager = new DaoManager();
 
