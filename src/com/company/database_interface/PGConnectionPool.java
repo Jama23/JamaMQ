@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class PGConnectionPool {
 
     private static Logger _LOGGER = Logger.getLogger(PGConnectionPool.class.getCanonicalName());
-    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger4();
+    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger3();
 
     private static PGConnectionPool _INSTANCE = null;
     private PGPoolingDataSource _source;
@@ -42,7 +42,9 @@ public class PGConnectionPool {
         Connection con = null;
         try {
             long startTime = System.nanoTime();
+
             con = _source.getConnection();
+
             long stopTime = System.nanoTime();
             _EVALLOG.log(startTime + "," + stopTime + ",PG_CONN_WAIT");
         } catch (SQLException e) {

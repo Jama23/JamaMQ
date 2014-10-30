@@ -13,7 +13,7 @@ import java.sql.*;
 public class MessageDao {
 
     private Connection _connection = null;
-    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger2();
+    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger5();
 
     public MessageDao(Connection connection) {
         _connection = connection;

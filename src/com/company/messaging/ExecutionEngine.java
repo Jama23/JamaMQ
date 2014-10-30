@@ -19,7 +19,7 @@ import static com.company.messaging.Response.*;
 public class ExecutionEngine {
 
     private static Logger _LOGGER = Logger.getLogger(ExecutionEngine.class.getCanonicalName());
-    //private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger4();
+    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger4();
 
     private DaoManager _manager = new DaoManager();
 
@@ -196,6 +196,9 @@ public class ExecutionEngine {
         byte[] message = new byte[messageLength];
         buffer.get(message);
         Message m = DBModelFactory.createMessage(senderId, receiverId, queueId, new String(message));
+
+        long startTime = System.nanoTime();
+
         _manager.startDBConnection();
         _manager.startDBTransaction();
         try {
@@ -213,6 +216,10 @@ public class ExecutionEngine {
         _manager.endDBTransaction();
         _manager.endDBConnection();
         }
+
+        long stopTime = System.nanoTime();
+        _EVALLOG.log(startTime + "," + stopTime + ",DB_ENQUEUE_LATENCY");
+
         return ok();
     }
 
@@ -226,6 +233,9 @@ public class ExecutionEngine {
             peek = true;
         }
         Message m;
+
+        long startTime = System.nanoTime();
+
         _manager.startDBConnection();
         _manager.startDBTransaction();
         try {
@@ -246,6 +256,10 @@ public class ExecutionEngine {
             _manager.endDBTransaction();
             _manager.endDBConnection();
         }
+
+        long stopTime = System.nanoTime();
+        _EVALLOG.log(startTime + "," + stopTime + ",DB_DEQUEUE_LATENCY");
+
         return ok(m);
     }
 

@@ -6,8 +6,6 @@
     <property name="lib.dir"    location="lib"/>
     <property name="main-class" value="com.company.messaging.MessagingMain"/>
     <property name="evalmain-class" value="com.company.evaluation.EvalMain"/>
-    <property name="producer-class" value="com.company.evaluation.ProducerMain"/>
-    <property name="consumer-class" value="com.company.evaluation.ConsumerMain"/>
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="postgresql-9.3-1102.jdbc41.jar"/>
     </path>
@@ -40,35 +38,13 @@
             </classpath>
             <arg value="localhost"/>
             <arg value="5555"/>
-			<arg value="2"/>
-            <arg value="100000"/>
+			<arg value="10"/>
+            <arg value="20000"/>
             <arg value="0"/>
             <arg value="0"/>
             <arg value="false"/>
             <arg value="0"/>
             <arg value="200"/>
-        </java>
-    </target>
-
-    <target name="runP" depends="jar" description="execute the jar file" >
-        <java classname="${producer-class}" fork="true">
-            <classpath>
-                <path refid="classpath"/>
-                <path location="${ant.project.name}.jar"/>
-            </classpath>
-            <arg value="localhost"/>
-            <arg value="5555"/>
-        </java>
-    </target>
-
-    <target name="runC" depends="jar" description="execute the jar file" >
-        <java classname="${consumer-class}" fork="true">
-            <classpath>
-                <path refid="classpath"/>
-                <path location="${ant.project.name}.jar"/>
-            </classpath>
-            <arg value="localhost"/>
-            <arg value="5555"/>
         </java>
     </target>
 
