@@ -27,72 +27,46 @@ public class ExecutionEngine {
         int messageType = _buffer.getInt();
         Response response;
 
-        long startTime, stopTime;
-
         switch (messageType) {
             case Response.MSG_CLIENT_REGISTER:
                 _LOGGER.log(Level.FINE, "MSG_CLIENT_REGISTER");
-                //startTime = System.nanoTime();
                 response = registerClient(_buffer.getInt());
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_CLIENT_REGISTER");
                 break;
             case Response.MSG_CLIENT_DEREGISTER:
                 _LOGGER.log(Level.FINE, "MSG_CLIENT_DEREGISTER");
-                //startTime = System.nanoTime();
                 response = deregisterClient(_buffer.getInt());
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_CLIENT_DEREGISTER");
                 break;
             case Response.MSG_QUEUE_CREATE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_CREATE");
-                //startTime = System.nanoTime();
                 response = createQueue(_buffer.getInt());
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_CREATE");
                 break;
             case Response.MSG_QUEUE_GET:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_GET");
-                //startTime = System.nanoTime();
                 response = getQueue(_buffer.getInt());
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_GET");
                 break;
             case Response.MSG_QUEUE_DELETE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_DELETE");
-                //startTime = System.nanoTime();
                 response = deleteQueue(_buffer.getInt());
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_DELETE");
                 break;
             case Response.MSG_QUEUE_ENQUEUE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_ENQUEUE");
-                //startTime = System.nanoTime();
                 response = enqueueMessage(_buffer);
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_ENQUEUE");
                 break;
             case Response.MSG_QUEUE_DEQUEUE:
                 _LOGGER.log(Level.FINE, "MSG_QUEUE_DEQUEUE");
-                //startTime = System.nanoTime();
                 response = dequeueMessage(_buffer);
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_QUEUE_DEQUEUE");
                 break;
             case Response.MSG_GET_WAITING_QUEUES:
                 _LOGGER.log(Level.FINE, "MSG_GET_WAITING_QUEUES");
-                //startTime = System.nanoTime();
                 response = getWaitingQueues(_buffer.getInt());
-                //stopTime = System.nanoTime();
                 response.serialize(_buffer);
-                //_EVALLOG.log(startTime + "," + stopTime + ",MSG_GET_WAITING_QUEUES");
                 break;
         }
         _LOGGER.log(Level.FINE, "End of execution engine process");
@@ -218,7 +192,7 @@ public class ExecutionEngine {
         }
 
         long stopTime = System.nanoTime();
-        _EVALLOG.log(startTime + "," + stopTime + ",DB_ENQUEUE_LATENCY");
+        _EVALLOG.log(startTime + "," + stopTime + ",DB_ENQUEUE_TOTAL");
 
         return ok();
     }
@@ -258,7 +232,7 @@ public class ExecutionEngine {
         }
 
         long stopTime = System.nanoTime();
-        _EVALLOG.log(startTime + "," + stopTime + ",DB_DEQUEUE_LATENCY");
+        _EVALLOG.log(startTime + "," + stopTime + ",DB_DEQUEUE_TOTAL");
 
         return ok(m);
     }

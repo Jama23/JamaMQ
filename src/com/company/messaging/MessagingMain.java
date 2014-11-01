@@ -23,11 +23,11 @@ public class MessagingMain {
 
         String date = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date(System.currentTimeMillis()));
         String configFilePath = "var/config.prop";
-        String log1Path = "log/mslog-f-w-" + date + ".csv";
-        String log2Path = "log/mslog-f-l-" + date + ".csv";
-        String log3Path = "log/mslog-b-w-" + date + ".csv";
-        String log4Path = "log/mslog-b-l-" + date + ".csv";
-        String log5Path = "log/mslog-db-l-" + date + ".csv";
+        String log1Path = "log/mslog-ms-exec-wait-" + date + ".csv";
+        String log2Path = "log/mslog-ms-lat-" + date + ".csv";
+        String log3Path = "log/mslog-pg-conn-wait-" + date + ".csv";
+        String log4Path = "log/mslog-db-lat-tot" + date + ".csv";
+        String log5Path = "log/mslog-db-lat-query" + date + ".csv";
 
         LoggerEval.initLogger1(log1Path);
         LoggerEval.initLogger2(log2Path);

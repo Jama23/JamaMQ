@@ -31,7 +31,7 @@ public class MessageDao {
             long startTime = System.nanoTime();
             callStat.execute();
             long stopTime = System.nanoTime();
-            _EVALLOG.log(startTime + "," + stopTime + ",DB_LATENCY_ENQUEUE");
+            _EVALLOG.log(startTime + "," + stopTime + ",DB_QUERY_ENQUEUE");
 
 
             callStat.close();
@@ -73,7 +73,7 @@ public class MessageDao {
                 long startTime = System.nanoTime();
                 ResultSet resSet = callStat.executeQuery();
                 long stopTime = System.nanoTime();
-                _EVALLOG.log(startTime + "," + stopTime + ",DB_LATENCY_DEQUEUE");
+                _EVALLOG.log(startTime + "," + stopTime + ",DB_QUERY_DEQUEUE");
 
 
                 resSet.next(); // if result set is empty we get an exception
