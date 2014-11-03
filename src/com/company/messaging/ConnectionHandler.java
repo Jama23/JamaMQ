@@ -18,6 +18,8 @@ public class ConnectionHandler implements Runnable {
 
     private static Logger _LOGGER = Logger.getLogger(ConnectionHandler.class.getCanonicalName());
 
+    private static com.company.logging.Logger _EVALLOG1 = LoggerEval.getLogger1();
+
     private final ExecutorService _executor;
     private final Selector _selector;
     private final SocketChannel _socketChannel;
@@ -25,17 +27,24 @@ public class ConnectionHandler implements Runnable {
 
     private ByteBuffer _buffer;
 
-    public ConnectionHandler(ExecutorService executor, Selector selector, SocketChannel socketChannel, SelectionKey key) {
+    private long _startTime;
+    private long _stopTime;
+
+    public ConnectionHandler(ExecutorService executor, Selector selector, SocketChannel socketChannel, SelectionKey key, long startTimeConnectionHandler) {
         _executor = executor;
         _selector = selector;
         _socketChannel = socketChannel;
         _key = key;
 
         _buffer = ByteBuffer.allocate(2048);
+
+        _startTime = startTimeConnectionHandler;
     }
 
     @Override
     public void run() {
+        _stopTime = System.nanoTime();
+        _EVALLOG1.log(_startTime + "," + _stopTime + ",MS_SELECTOR_WAIT");
         if(_key.isReadable()) {
             _LOGGER.log(Level.FINE, "reading");
             read();
@@ -43,10 +52,12 @@ public class ConnectionHandler implements Runnable {
             _LOGGER.log(Level.FINE, "writing");
             write();
         }
+        _startTime = System.nanoTime();
     }
 
     private void read() {
         try {
+
             int bytesRead = 0;
             int bytes, limit, pos, size;
 
@@ -88,6 +99,7 @@ public class ConnectionHandler implements Runnable {
             // submit a client to the executor service
             _buffer.flip();
             _buffer.position(4);
+
             long startTime = System.nanoTime();
             _executor.submit(new Connection(startTime, _buffer,
                     // register the write back callback

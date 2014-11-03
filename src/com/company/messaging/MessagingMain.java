@@ -23,17 +23,21 @@ public class MessagingMain {
 
         String date = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date(System.currentTimeMillis()));
         String configFilePath = "var/config.prop";
-        String log1Path = "log/mslog-ms-exec-wait-" + date + ".csv";
-        String log2Path = "log/mslog-ms-lat-" + date + ".csv";
-        String log3Path = "log/mslog-pg-conn-wait-" + date + ".csv";
-        String log4Path = "log/mslog-db-lat-tot" + date + ".csv";
-        String log5Path = "log/mslog-db-lat-query" + date + ".csv";
+        String log1Path = "log/mslog-selector-wait-" + date + ".csv";
+        String log2Path = "log/mslog-ms-exec-wait-" + date + ".csv";
+        String log3Path = "log/mslog-ms-lat-" + date + ".csv";
+        String log4Path = "log/dblog-pg-conn-wait-" + date + ".csv";
+        String log5Path = "log/dblog-lat-tot-" + date + ".csv";
+        String log6Path = "log/dblog-db-execute-" + date + ".csv";
+        String log7Path = "log/dblog-db-commit-" + date + ".csv";
 
         LoggerEval.initLogger1(log1Path);
         LoggerEval.initLogger2(log2Path);
         LoggerEval.initLogger3(log3Path);
         LoggerEval.initLogger4(log4Path);
         LoggerEval.initLogger5(log5Path);
+        LoggerEval.initLogger6(log6Path);
+        LoggerEval.initLogger7(log7Path);
 
         Configuration.initConfig(configFilePath);
 

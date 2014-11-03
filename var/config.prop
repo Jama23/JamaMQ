@@ -2,12 +2,12 @@
 db.server.name: localhost
 db.server.port: 5432
 db.database.name: jamamq
-db.user: jamamquser
-db.password: jamamqpw
-db.pool.max: 4
-db.pool.initial: 4
+db.user: postgres
+db.password: dmd5CsS9
+db.pool.max: 10
+db.pool.initial: 10
 
 # Messaging Service
-ms.pool.max: 10
+ms.pool.max: 30
 net.interface.ip: 0.0.0.0
 net.interface.port: 5555

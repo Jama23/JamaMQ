@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 public class Connection implements Runnable {
 
     private static Logger _LOGGER = Logger.getLogger(Connection.class.getCanonicalName());
-    private static com.company.logging.Logger _EVALLOG1 = LoggerEval.getLogger1();
     private static com.company.logging.Logger _EVALLOG2 = LoggerEval.getLogger2();
+    private static com.company.logging.Logger _EVALLOG3 = LoggerEval.getLogger3();
 
     private final ByteBuffer _buffer;
     private final Callback _callback;
@@ -39,7 +39,7 @@ public class Connection implements Runnable {
 
         long stopTime2 = System.nanoTime();
 
-        _EVALLOG1.log(_startTime + "," + stopTime + ",MS_EXEC_WAIT");
-        _EVALLOG2.log(stopTime + "," + stopTime2 + ",MS_LATENCY");
+        _EVALLOG2.log(_startTime + "," + stopTime + ",MS_EXEC_WAIT");
+        _EVALLOG3.log(stopTime + "," + stopTime2 + ",MS_LATENCY");
     }
 }

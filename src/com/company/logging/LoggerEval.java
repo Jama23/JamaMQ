@@ -10,6 +10,8 @@ public class LoggerEval {
     private static Logger _INSTANCE3 = null;
     private static Logger _INSTANCE4 = null;
     private static Logger _INSTANCE5 = null;
+    private static Logger _INSTANCE6 = null;
+    private static Logger _INSTANCE7 = null;
 
     public static void initLogger1(String logPath) {
         _INSTANCE1 = new Logger(logPath);
@@ -36,6 +38,16 @@ public class LoggerEval {
         new Thread(_INSTANCE5).start();
     }
 
+    public static void initLogger6(String logPath) {
+        _INSTANCE6 = new Logger(logPath);
+        new Thread(_INSTANCE6).start();
+    }
+
+    public static void initLogger7(String logPath) {
+        _INSTANCE7 = new Logger(logPath);
+        new Thread(_INSTANCE7).start();
+    }
+
     public static Logger getLogger1() {
         return _INSTANCE1;
     }
@@ -51,4 +63,11 @@ public class LoggerEval {
     public static Logger getLogger5() {
         return _INSTANCE5;
     }
+    public static Logger getLogger6() {
+        return _INSTANCE6;
+    }
+    public static Logger getLogger7() {
+        return _INSTANCE7;
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.company.database_interface;
 
+import com.company.logging.LoggerEval;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -11,6 +13,8 @@ import java.util.logging.Logger;
 public class DaoManager {
 
     private static Logger _LOGGER = Logger.getLogger(DaoManager.class.getCanonicalName());
+
+    private static com.company.logging.Logger _EVALLOG7 = LoggerEval.getLogger7();
 
     private Connection _connection = null;
     private MessageDao _messageDao = null;
@@ -45,7 +49,12 @@ public class DaoManager {
     public void endDBTransaction() {
         try {
             _LOGGER.log(Level.FINE, "Ending database transaction.");
+            long startTime = System.nanoTime();
+
             _connection.commit();
+
+            long stopTime = System.nanoTime();
+            _EVALLOG7.log(startTime + "," + stopTime + ",DB_COMMIT");
         } catch (SQLException e) {
             _LOGGER.log(Level.SEVERE, "Ending database transaction failed.");
             throw new RuntimeException(e);

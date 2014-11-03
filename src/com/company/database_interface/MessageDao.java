@@ -13,7 +13,7 @@ import java.sql.*;
 public class MessageDao {
 
     private Connection _connection = null;
-    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger5();
+    private static com.company.logging.Logger _EVALLOG6 = LoggerEval.getLogger6();
 
     public MessageDao(Connection connection) {
         _connection = connection;
@@ -31,7 +31,7 @@ public class MessageDao {
             long startTime = System.nanoTime();
             callStat.execute();
             long stopTime = System.nanoTime();
-            _EVALLOG.log(startTime + "," + stopTime + ",DB_QUERY_ENQUEUE");
+            _EVALLOG6.log(startTime + "," + stopTime + ",DB_QUERY_ENQUEUE");
 
 
             callStat.close();
@@ -73,7 +73,7 @@ public class MessageDao {
                 long startTime = System.nanoTime();
                 ResultSet resSet = callStat.executeQuery();
                 long stopTime = System.nanoTime();
-                _EVALLOG.log(startTime + "," + stopTime + ",DB_QUERY_DEQUEUE");
+                _EVALLOG6.log(startTime + "," + stopTime + ",DB_QUERY_DEQUEUE");
 
 
                 resSet.next(); // if result set is empty we get an exception

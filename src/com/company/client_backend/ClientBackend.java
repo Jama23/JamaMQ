@@ -1,6 +1,7 @@
 package com.company.client_backend;
 
 import com.company.exception.*;
+import com.company.logging.LoggerEval;
 import com.company.messaging.Response;
 
 import java.io.DataInputStream;

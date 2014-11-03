@@ -19,7 +19,7 @@ import static com.company.messaging.Response.*;
 public class ExecutionEngine {
 
     private static Logger _LOGGER = Logger.getLogger(ExecutionEngine.class.getCanonicalName());
-    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger4();
+    private static com.company.logging.Logger _EVALLOG5 = LoggerEval.getLogger5();
 
     private DaoManager _manager = new DaoManager();
 
@@ -192,7 +192,7 @@ public class ExecutionEngine {
         }
 
         long stopTime = System.nanoTime();
-        _EVALLOG.log(startTime + "," + stopTime + ",DB_ENQUEUE_TOTAL");
+        _EVALLOG5.log(startTime + "," + stopTime + ",DB_ENQUEUE_TOTAL");
 
         return ok();
     }
@@ -232,7 +232,7 @@ public class ExecutionEngine {
         }
 
         long stopTime = System.nanoTime();
-        _EVALLOG.log(startTime + "," + stopTime + ",DB_DEQUEUE_TOTAL");
+        _EVALLOG5.log(startTime + "," + stopTime + ",DB_DEQUEUE_TOTAL");
 
         return ok(m);
     }

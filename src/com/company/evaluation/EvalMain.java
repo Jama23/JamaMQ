@@ -33,6 +33,7 @@ public class EvalMain {
 
             String date = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss").format(new Date(System.currentTimeMillis()));
             String logPath = "log/clientlog-" + date + ".csv";
+
             LoggerEval.initLogger1(logPath);
 
             EvalMain evalMain = new EvalMain(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Boolean.parseBoolean(args[6]), Integer.parseInt(args[7]), Integer.parseInt(args[8]), Integer.parseInt(args[9]));

@@ -43,7 +43,8 @@ public class AcceptorHandler implements Runnable {
                 SelectionKey key = socketChannel.register(_selector, SelectionKey.OP_READ);
                 _LOGGER.log(Level.FINE, "Registered on selector");
 
-                key.attach(new ConnectionHandler(_executor, _selector, socketChannel, key));
+                long startTimeConnectionHandler = System.nanoTime();
+                key.attach(new ConnectionHandler(_executor, _selector, socketChannel, key, startTimeConnectionHandler));
                 _LOGGER.log(Level.FINE, "Attached ConnectionHandler");
             }
         } catch (IOException e) {

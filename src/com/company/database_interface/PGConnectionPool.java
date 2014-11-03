@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class PGConnectionPool {
 
     private static Logger _LOGGER = Logger.getLogger(PGConnectionPool.class.getCanonicalName());
-    private static com.company.logging.Logger _EVALLOG = LoggerEval.getLogger3();
+    private static com.company.logging.Logger _EVALLOG4 = LoggerEval.getLogger4();
 
     private static PGConnectionPool _INSTANCE = null;
     private PGPoolingDataSource _source;
@@ -46,7 +46,7 @@ public class PGConnectionPool {
             con = _source.getConnection();
 
             long stopTime = System.nanoTime();
-            _EVALLOG.log(startTime + "," + stopTime + ",PG_CONN_WAIT");
+            _EVALLOG4.log(startTime + "," + stopTime + ",PG_CONN_WAIT");
         } catch (SQLException e) {
             _LOGGER.log(Level.SEVERE, "Could not retrieve connection from the connection pool.");
             throw new RuntimeException(e);
